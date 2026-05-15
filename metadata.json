@@ -1,0 +1,6 @@
+{
+  "name": "LinkLedger",
+  "description": "Visual mapping tool connecting payment cards to website subscriptions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
