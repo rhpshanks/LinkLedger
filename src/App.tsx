@@ -362,7 +362,7 @@ export default function App() {
          </div>
       </Modal>
 
-      <Modal isOpen={isPlansOpen} onClose={() => { setIsPlansOpen(false); setPlansPhase('pick'); }} title={plansPhase === 'pick' ? 'SELECT your PLAN' : plansPhase === 'pay' ? 'PICK PAYMENT WAY' : 'SUBMIT TRANSACTION'}>
+      <Modal isOpen={isPlansOpen} onClose={() => { setIsPlansOpen(false); setPlansPhase('pick'); }} title={plansPhase === 'pick' ? 'SELECT your PLAN' : plansPhase === 'pay' ? 'Payment Choice' : 'SUBMIT TRANSACTION'}>
          {plansPhase === 'pick' && (
            <>
             <div className="flex justify-center mb-8">
@@ -435,7 +435,7 @@ export default function App() {
                    <div className="font-bold text-[#E0E0E6]">Payoneer</div>
                    <div className="text-[10px] text-white/40">Best for International transfers</div>
                 </div>
-                <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-blue-600/20 transition-colors">→</div>
+                <div className="text-[10px] font-bold text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity">PICK</div>
               </button>
 
               <button 
@@ -444,9 +444,9 @@ export default function App() {
               >
                 <div className="text-left">
                    <div className="font-bold text-[#E0E0E6]">Pakistan Local Transfer</div>
-                   <div className="text-[10px] text-white/40">SadaPay, NayaPay or Bank IBAN</div>
+                   <div className="text-[10px] text-white/40">Local Pouch or Bank IBAN</div>
                 </div>
-                <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-blue-600/20 transition-colors">→</div>
+                <div className="text-[10px] font-bold text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity">PICK</div>
               </button>
 
               <button onClick={() => setPlansPhase('pick')} className="w-full py-3 text-xs font-bold text-white/30 uppercase tracking-widest hover:text-white transition-colors">Go Back</button>
