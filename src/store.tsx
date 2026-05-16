@@ -8,10 +8,10 @@ interface AppContextType {
   alertsPrefs: AlertPreference;
   addCard: (card: Omit<Card, 'id'>) => void;
   updateCard: (id: string, updates: Partial<Card>) => void;
-  removeCard: (id: string) => void;
+  clearCard: (id: string) => void;
   addSubscription: (sub: Omit<Subscription, 'id'>) => void;
   updateSubscription: (id: string, updates: Partial<Subscription>) => void;
-  removeSubscription: (id: string) => void;
+  clearSubscription: (id: string) => void;
   setAlertsPrefs: (prefs: AlertPreference) => void;
   nodePositions: Record<string, { x: number; y: number }>;
   updateNodePosition: (id: string, position: { x: number; y: number }) => void;
@@ -100,7 +100,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setCards(prev => prev.map(c => c.id === id ? { ...c, ...updates } : c));
   };
 
-  const removeCard = (id: string) => {
+  const clearCard = (id: string) => {
     setCards(prev => prev.filter(c => c.id !== id));
   };
 
@@ -113,7 +113,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setSubscriptions(prev => prev.map(s => s.id === id ? { ...s, ...updates } : s));
   };
 
-  const removeSubscription = (id: string) => {
+  const clearSubscription = (id: string) => {
     setSubscriptions(prev => prev.filter(s => s.id !== id));
   };
   
@@ -128,8 +128,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   return (
     <AppContext.Provider value={{
       cards, subscriptions, alertsPrefs,
-      addCard, updateCard, removeCard,
-      addSubscription, updateSubscription, removeSubscription,
+      addCard, updateCard, clearCard,
+      addSubscription, updateSubscription, clearSubscription,
       setAlertsPrefs,
       nodePositions, updateNodePosition, updateNodesPositions,
       currency, setCurrency,

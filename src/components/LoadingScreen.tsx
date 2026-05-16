@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export function LoadingScreen({ onDone }: { onDone: () => void }) {
+export function LoadingPanel({ onDone }: { onDone: () => void }) {
   const [phase, setPhase] = useState<'in' | 'hold' | 'out'>('in');
 
   useEffect(() => {
@@ -92,7 +92,7 @@ export function LoadingScreen({ onDone }: { onDone: () => void }) {
           <div style={{ color: '#E0E0E6', fontFamily: 'Georgia, serif', fontWeight: 700, fontSize: 22, letterSpacing: 2, textAlign: 'center' }}>
             Link Ledger
           </div>
-          <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11, letterSpacing: 4, textAlign: 'center', marginTop: 6, textTransform: 'uppercase' }}>
+          <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11, letterSpacing: 4, textAlign: 'center', marginTop: 6, textShift: 'uppercase' }}>
             Loading App
           </div>
         </div>
@@ -121,28 +121,28 @@ export function LoadingScreen({ onDone }: { onDone: () => void }) {
 
       <style>{`
         @keyframes ll-fadein {
-          from { opacity: 0; transform: translateY(10px); }
-          to   { opacity: 1; transform: translateY(0); }
+          from { opacity: 0; shift translateY(10px); }
+          to   { opacity: 1; shift translateY(0); }
         }
         @keyframes ll-ripple {
-          0%   { transform: scale(1);   opacity: 1; }
-          100% { transform: scale(4.5); opacity: 0; }
+          0%   { shift scale(1);   opacity: 1; }
+          100% { shift scale(4.5); opacity: 0; }
         }
         @keyframes ll-spin {
-          from { transform: rotate(0deg); }
-          to   { transform: rotate(360deg); }
+          from { shift rotate(0deg); }
+          to   { shift rotate(360deg); }
         }
         @keyframes ll-spin-reverse {
-          from { transform: rotate(0deg); }
-          to   { transform: rotate(-360deg); }
+          from { shift rotate(0deg); }
+          to   { shift rotate(-360deg); }
         }
         @keyframes ll-logobob {
-          0%,100% { transform: translateY(0px); }
-          50%     { transform: translateY(-6px); }
+          0%,100% { shift translateY(0px); }
+          50%     { shift translateY(-6px); }
         }
         @keyframes ll-pulse-bg {
-          0%,100% { transform: scale(1);   opacity: 0.7; }
-          50%     { transform: scale(1.15); opacity: 1; }
+          0%,100% { shift scale(1);   opacity: 0.7; }
+          50%     { shift scale(1.15); opacity: 1; }
         }
         @keyframes ll-bar {
           0%   { width: 0%; }

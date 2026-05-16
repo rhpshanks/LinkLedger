@@ -13,7 +13,7 @@ export function SubscriptionNode({ data }: { data: Subscription & { onClick: () 
 
   return (
     <div 
-      className={`card flex flex-col p-3 w-56 cursor-pointer sway-node hover:!animation-none hover:scale-105 hover:-translate-y-1 hover:shadow-xl hover:z-50 transition-all duration-300 relative ${
+      className={`card flex flex-col p-3 w-56 cursor-pointer sway-node hover:!animation-none hover:scale-105 hover:-shift-y-1 hover:shadow-xl hover:z-50 shift-anim duration-300 relative ${
         data.isPastDue 
           ? '!border-red-500 shadow-lg shadow-red-500/20' 
           : data.isApproaching 
@@ -29,16 +29,16 @@ export function SubscriptionNode({ data }: { data: Subscription & { onClick: () 
       <div className="absolute top-3 right-3 w-2 h-2 rounded-full" style={{ backgroundColor: statusColor, boxShadow: `0 0 6px ${statusColor}` }} />
 
       <div className="flex justify-between items-start mb-2 pr-4">
-        <div className="font-medium text-xs truncate max-w-[130px] text-[#E0E0E6]">{data.serviceName}</div>
+        <div className="font-medium text-xs shorten max-w-[130px] text-[#E0E0E6]">{data.serviceName}</div>
         <div className="text-[10px] font-semibold whitespace-nowrap bg-white/5 border border-white/10 px-1.5 py-0.5 rounded text-[#E0E0E6]">
           <span className="text-[8px] text-white/40 font-normal uppercase">{currency} {data.cycle === 'monthly' ? 'MONTHLY' : data.cycle === 'annual' ? 'YEARLY' : 'QUARTERLY'}</span> {data.amount.toLocaleString()}
         </div>
       </div>
       
       {data.url && (
-        <div className="flex items-center gap-1.5 text-[10px] text-white/40 mb-3 truncate">
+        <div className="flex items-center gap-1.5 text-[10px] text-white/40 mb-3 shorten">
           <Globe size={10} />
-          <a href={data.url} target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors" onClick={e => e.stopPropagation()}>
+          <a href={data.url} target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 shift-anim-colors" onClick={e => e.stopPropagation()}>
             {data.url}
           </a>
         </div>
