@@ -93,7 +93,7 @@ export function LoadingScreen({ onDone }: { onDone: () => void }) {
             Link Ledger
           </div>
           <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11, letterSpacing: 4, textAlign: 'center', marginTop: 6, textTransform: 'uppercase' }}>
-            Loading your workspace
+            Loading App
           </div>
         </div>
 
