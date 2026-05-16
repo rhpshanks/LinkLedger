@@ -24,6 +24,8 @@ export default function App() {
   const [isEditSubOpen, setIsEditSubOpen] = useState(false);
   const [isPlansOpen, setIsPlansOpen] = useState(false);
   const [isYearlyBilling, setIsYearlyBilling] = useState(false);
+  const [plansPhase, setPlansPhase] = useState<'pick' | 'pay' | 'verify'>('pick');
+  const [paymentMethod, setPaymentMethod] = useState<'payoneer' | 'bank' | null>(null);
   const [filterType, setFilterType] = useState<'all' | 'alert' | 'soon' | 'high_cost'>('all');
 
   useEffect(() => {
@@ -360,63 +362,124 @@ export default function App() {
          </div>
       </Modal>
 
-      <Modal isOpen={isPlansOpen} onClose={() => setIsPlansOpen(false)} title="SELECT your PLAN">
-         <div className="flex justify-center mb-8">
-            <div className="bg-white/5 p-1 rounded-xl border border-white/10 flex">
-               <button 
-                  onClick={() => setIsYearlyBilling(false)}
-                  className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${!isYearlyBilling ? 'bg-blue-600 text-white shadow-lg' : 'text-white/40 hover:text-white'}`}
-               >
-                  MONTHLY
-               </button>
-               <button 
-                  onClick={() => setIsYearlyBilling(true)}
-                  className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${isYearlyBilling ? 'bg-blue-600 text-white shadow-lg' : 'text-white/40 hover:text-white'}`}
-               >
-                  YEARLY
-               </button>
-            </div>
-         </div>
-
-         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-2">
-            {/* No Cost Tier */}
-            <div className="p-6 rounded-2xl bg-white/5 border border-white/10 flex flex-col h-full">
-               <div className="text-sm font-bold text-white/40 uppercase tracking-widest mb-2">Basic</div>
-               <div className="text-3xl font-black text-[#E0E0E6] mb-4">No Cost</div>
-               <ul className="space-y-3 mb-8 flex-1">
-                 <li className="text-xs text-white/70 flex items-center gap-2">3 Cash Sources</li>
-                 <li className="text-xs text-white/70 flex items-center gap-2">10 Regular Services</li>
-                 <li className="text-xs text-white/30 flex items-center gap-2 pt-3">Sync on Devices</li>
-               </ul>
-               <button className="w-full py-3 rounded-xl bg-white/10 text-white/60 text-xs font-bold uppercase tracking-widest cursor-default">Current Choice</button>
-            </div>
-
-            {/* Pro Tier */}
-            <div className="p-6 rounded-2xl bg-blue-600/10 border-2 border-blue-500/50 flex flex-col h-full relative overflow-hidden shadow-2xl shadow-blue-600/20">
-               <div className="absolute top-0 right-0 bg-blue-500 text-white text-[8px] font-black px-3 py-1 rounded-bl-lg">TOP VALUE</div>
-               <div className="text-sm font-bold text-blue-400 uppercase tracking-widest mb-2">PRO</div>
-               <div className="text-3xl font-black text-[#E0E0E6] mb-1">
-                  {isYearlyBilling ? 'USD 20' : 'USD 2'}
-                  <span className="text-[10px] font-bold text-white/40 ml-2 uppercase tracking-widest">
-                     {isYearlyBilling ? 'YEARLY' : 'MONTHLY'}
-                  </span>
+      <Modal isOpen={isPlansOpen} onClose={() => { setIsPlansOpen(false); setPlansPhase('pick'); }} title={plansPhase === 'pick' ? 'SELECT your PLAN' : plansPhase === 'pay' ? 'PICK PAYMENT WAY' : 'SUBMIT TRANSACTION'}>
+         {plansPhase === 'pick' && (
+           <>
+            <div className="flex justify-center mb-8">
+               <div className="bg-white/5 p-1 rounded-xl border border-white/10 flex">
+                  <button 
+                     onClick={() => setIsYearlyBilling(false)}
+                     className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${!isYearlyBilling ? 'bg-blue-600 text-white shadow-lg' : 'text-white/40 hover:text-white'}`}
+                  >
+                     MONTHLY
+                  </button>
+                  <button 
+                     onClick={() => setIsYearlyBilling(true)}
+                     className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${isYearlyBilling ? 'bg-blue-600 text-white shadow-lg' : 'text-white/40 hover:text-white'}`}
+                  >
+                     YEARLY
+                  </button>
                </div>
-               {isYearlyBilling && (
-                 <div className="text-[10px] font-bold text-green-400 mb-4 uppercase tracking-tighter">
-                   SAVE 4 USD YEARLY
-                 </div>
-               )}
-               {!isYearlyBilling && <div className="h-4 mb-4" />}
-               <ul className="space-y-3 mb-8 flex-1">
-                 <li className="text-xs text-white/90 flex items-center gap-2">Unlimited Sources</li>
-                 <li className="text-xs text-white/90 flex items-center gap-2">Unlimited Services</li>
-                 <li className="text-xs text-white/90 flex items-center gap-2">Sync on Devices</li>
-                 <li className="text-xs text-white/90 flex items-center gap-2">Data Reports</li>
-                 <li className="text-xs text-white/90 flex items-center gap-2">Custom Themes</li>
-               </ul>
-               <button className="w-full py-3 rounded-xl bg-blue-600 text-white text-xs font-bold uppercase tracking-widest hover:bg-blue-500 transition-all shadow-lg shadow-blue-600/40">Select PRO</button>
             </div>
-         </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-2">
+               {/* No Cost Tier */}
+               <div className="p-6 rounded-2xl bg-white/5 border border-white/10 flex flex-col h-full">
+                  <div className="text-sm font-bold text-white/40 uppercase tracking-widest mb-2">Basic</div>
+                  <div className="text-3xl font-black text-[#E0E0E6] mb-4">No Cost</div>
+                  <ul className="space-y-3 mb-8 flex-1">
+                    <li className="text-xs text-white/70 flex items-center gap-2">3 Cash Sources</li>
+                    <li className="text-xs text-white/70 flex items-center gap-2">10 Regular Services</li>
+                    <li className="text-xs text-white/30 flex items-center gap-2 pt-3">Sync on Devices</li>
+                  </ul>
+                  <button className="w-full py-3 rounded-xl bg-white/10 text-white/60 text-xs font-bold uppercase tracking-widest cursor-default">Current Choice</button>
+               </div>
+
+               {/* Pro Tier */}
+               <div className="p-6 rounded-2xl bg-blue-600/10 border-2 border-blue-500/50 flex flex-col h-full relative overflow-hidden shadow-2xl shadow-blue-600/20">
+                  <div className="absolute top-0 right-0 bg-blue-500 text-white text-[8px] font-black px-3 py-1 rounded-bl-lg">TOP VALUE</div>
+                  <div className="text-sm font-bold text-blue-400 uppercase tracking-widest mb-2">PRO</div>
+                  <div className="text-3xl font-black text-[#E0E0E6] mb-1">
+                     {isYearlyBilling ? 'USD 20' : 'USD 2'}
+                     <span className="text-[10px] font-bold text-white/40 ml-2 uppercase tracking-widest">
+                        {isYearlyBilling ? 'YEARLY' : 'MONTHLY'}
+                     </span>
+                  </div>
+                  {isYearlyBilling && (
+                    <div className="text-[10px] font-bold text-green-400 mb-4 uppercase tracking-tighter">
+                      SAVE 4 USD YEARLY
+                    </div>
+                  )}
+                  {!isYearlyBilling && <div className="h-4 mb-4" />}
+                  <ul className="space-y-3 mb-8 flex-1">
+                    <li className="text-xs text-white/90 flex items-center gap-2">Unlimited Sources</li>
+                    <li className="text-xs text-white/90 flex items-center gap-2">Unlimited Services</li>
+                    <li className="text-xs text-white/90 flex items-center gap-2">Sync on Devices</li>
+                    <li className="text-xs text-white/90 flex items-center gap-2">Data Reports</li>
+                    <li className="text-xs text-white/90 flex items-center gap-2">Custom Themes</li>
+                  </ul>
+                  <button onClick={() => setPlansPhase('pay')} className="w-full py-3 rounded-xl bg-blue-600 text-white text-xs font-bold uppercase tracking-widest hover:bg-blue-500 transition-all shadow-lg shadow-blue-600/40">Select PRO</button>
+               </div>
+            </div>
+           </>
+         )}
+
+         {plansPhase === 'pay' && (
+           <div className="space-y-4 p-2">
+              <div className="text-xs text-white/50 mb-6">Choose how you want to send the value:</div>
+              <button 
+                onClick={() => { setPaymentMethod('payoneer'); setPlansPhase('verify'); }}
+                className="w-full p-4 rounded-xl border border-white/10 bg-white/5 hover:border-blue-500/50 transition-all flex items-center justify-between group"
+              >
+                <div className="text-left">
+                   <div className="font-bold text-[#E0E0E6]">Payoneer</div>
+                   <div className="text-[10px] text-white/40">Best for International transfers</div>
+                </div>
+                <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-blue-600/20 transition-colors">→</div>
+              </button>
+
+              <button 
+                onClick={() => { setPaymentMethod('bank'); setPlansPhase('verify'); }}
+                className="w-full p-4 rounded-xl border border-white/10 bg-white/5 hover:border-blue-500/50 transition-all flex items-center justify-between group"
+              >
+                <div className="text-left">
+                   <div className="font-bold text-[#E0E0E6]">Pakistan Local Transfer</div>
+                   <div className="text-[10px] text-white/40">SadaPay, NayaPay or Bank IBAN</div>
+                </div>
+                <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-blue-600/20 transition-colors">→</div>
+              </button>
+
+              <button onClick={() => setPlansPhase('pick')} className="w-full py-3 text-xs font-bold text-white/30 uppercase tracking-widest hover:text-white transition-colors">Go Back</button>
+           </div>
+         )}
+
+         {plansPhase === 'verify' && (
+           <div className="space-y-6 p-2">
+              <div className="p-4 rounded-xl bg-blue-600/5 border border-blue-500/20 text-xs leading-relaxed">
+                 <div className="font-bold text-blue-400 uppercase mb-2">Instructions</div>
+                 {paymentMethod === 'payoneer' ? (
+                   <p>Send **{isYearlyBilling ? 'USD 20' : 'USD 2'}** to Payoneer ID: **your-id@email.com** (Placeholder). Once sent, paste the transaction ID below.</p>
+                 ) : (
+                   <p>Send **{isYearlyBilling ? 'PKR 560' : 'PKR 60'}** to Sadapay IBAN: **PK00SADA000000000000** (Placeholder). Paste transaction ID below.</p>
+                 )}
+              </div>
+
+              <div>
+                 <label className="label-base">Transaction ID / Reference</label>
+                 <input className="input-base" placeholder="Enter ID here" />
+              </div>
+
+              <div className="flex gap-3">
+                 <button onClick={() => setPlansPhase('pay')} className="flex-1 py-3 rounded-xl bg-white/5 text-white/60 text-xs font-bold uppercase tracking-widest hover:bg-white/10 transition-all">Back</button>
+                 <button 
+                  onClick={() => { alert('Transaction submitted for review!'); setIsPlansOpen(false); setPlansPhase('pick'); }}
+                  className="flex-2 py-3 rounded-xl bg-blue-600 text-white text-xs font-bold uppercase tracking-widest hover:bg-blue-500 transition-all shadow-lg shadow-blue-600/20"
+                 >
+                   Submit for Review
+                 </button>
+              </div>
+           </div>
+         )}
       </Modal>
 
     </div>
