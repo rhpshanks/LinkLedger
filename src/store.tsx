@@ -22,6 +22,10 @@ interface AppContextType {
   setCreditScore: (score: number) => void;
   isAutoScore: boolean;
   setIsAutoScore: (auto: boolean) => void;
+  charityGoal: number;
+  setCharityGoal: (goal: number) => void;
+  charityCurrent: number;
+  setCharityCurrent: (current: number) => void;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -55,6 +59,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   });
   const [creditScore, setCreditScore] = useState<number>(() => loadState('ll_credit_score', 742));
   const [isAutoScore, setIsAutoScore] = useState<boolean>(() => loadState('ll_auto_score', false));
+  const [charityGoal, setCharityGoal] = useState<number>(() => loadState('ll_charity_goal', 100));
+  const [charityCurrent, setCharityCurrent] = useState<number>(() => loadState('ll_charity_current', 0));
 
   useEffect(() => { localStorage.setItem('ll_cards', JSON.stringify(cards)); }, [cards]);
   useEffect(() => { localStorage.setItem('ll_subs', JSON.stringify(subscriptions)); }, [subscriptions]);
@@ -63,6 +69,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => { localStorage.setItem('ll_currency', JSON.stringify(currency)); }, [currency]);
   useEffect(() => { localStorage.setItem('ll_credit_score', JSON.stringify(creditScore)); }, [creditScore]);
   useEffect(() => { localStorage.setItem('ll_auto_score', JSON.stringify(isAutoScore)); }, [isAutoScore]);
+  useEffect(() => { localStorage.setItem('ll_charity_goal', JSON.stringify(charityGoal)); }, [charityGoal]);
+  useEffect(() => { localStorage.setItem('ll_charity_current', JSON.stringify(charityCurrent)); }, [charityCurrent]);
 
   const addCard = (card: Omit<Card, 'id'>) => {
     const id = `card-${uuidv4()}`;
@@ -107,7 +115,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
       nodePositions, updateNodePosition, updateNodesPositions,
       currency, setCurrency,
       creditScore, setCreditScore,
-      isAutoScore, setIsAutoScore
+      isAutoScore, setIsAutoScore,
+      charityGoal, setCharityGoal,
+      charityCurrent, setCharityCurrent
     }}>
       {children}
     </AppContext.Provider>
