@@ -26,6 +26,8 @@ interface AppContextType {
   setCharityGoal: (goal: number) => void;
   charityCurrent: number;
   setCharityCurrent: (current: number) => void;
+  isPremium: boolean;
+  setIsPremium: (premium: boolean) => void;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -61,6 +63,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [isAutoScore, setIsAutoScore] = useState<boolean>(() => loadState('ll_auto_score', false));
   const [charityGoal, setCharityGoal] = useState<number>(() => loadState('ll_charity_goal', 100));
   const [charityCurrent, setCharityCurrent] = useState<number>(() => loadState('ll_charity_current', 0));
+  const [isPremium, setIsPremium] = useState<boolean>(() => loadState('ll_is_premium', false));
 
   useEffect(() => { localStorage.setItem('ll_cards', JSON.stringify(cards)); }, [cards]);
   useEffect(() => { localStorage.setItem('ll_subs', JSON.stringify(subscriptions)); }, [subscriptions]);
@@ -71,6 +74,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => { localStorage.setItem('ll_auto_score', JSON.stringify(isAutoScore)); }, [isAutoScore]);
   useEffect(() => { localStorage.setItem('ll_charity_goal', JSON.stringify(charityGoal)); }, [charityGoal]);
   useEffect(() => { localStorage.setItem('ll_charity_current', JSON.stringify(charityCurrent)); }, [charityCurrent]);
+  useEffect(() => { localStorage.setItem('ll_is_premium', JSON.stringify(isPremium)); }, [isPremium]);
 
   const addCard = (card: Omit<Card, 'id'>) => {
     const id = `card-${uuidv4()}`;
@@ -117,7 +121,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       creditScore, setCreditScore,
       isAutoScore, setIsAutoScore,
       charityGoal, setCharityGoal,
-      charityCurrent, setCharityCurrent
+      charityCurrent, setCharityCurrent,
+      isPremium, setIsPremium
     }}>
       {children}
     </AppContext.Provider>

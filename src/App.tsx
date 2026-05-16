@@ -24,7 +24,7 @@ const SERVICE_HINTS: Record<string, { card: string; benefit: string }> = {
 };
 
 export default function App() {
-  const { cards, subscriptions, removeCard, removeSubscription, updateNodesPositions, currency, creditScore, setCreditScore, isAutoScore, setIsAutoScore, charityGoal, setCharityGoal, charityCurrent, setCharityCurrent } = useAppStore();
+  const { cards, subscriptions, removeCard, removeSubscription, updateNodesPositions, currency, creditScore, setCreditScore, isAutoScore, setIsAutoScore, charityGoal, setCharityGoal, charityCurrent, setCharityCurrent, isPremium } = useAppStore();
 
   useEffect(() => {
     if (isAutoScore) {
@@ -212,6 +212,24 @@ export default function App() {
                </div>
                <div className="text-[8px] font-bold text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity">Show</div>
             </button>
+
+            {/* Test Ads Zone */}
+            {!isPremium && (
+              <div className="px-3 pt-6">
+                <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-600/10 to-purple-600/5 border border-white/10 relative overflow-hidden group cursor-pointer hover:border-blue-500/30 transition-all">
+                  <div className="flex justify-between items-start mb-2">
+                    <div className="text-[9px] font-black text-blue-400 uppercase tracking-widest">Sponsored Choice</div>
+                    <div className="text-[7px] bg-white/10 text-white/40 px-1 py-0.5 rounded uppercase font-black tracking-tighter">AD</div>
+                  </div>
+                  <div className="font-bold text-xs text-[#E0E0E6] mb-1">Sapphire Reward Card</div>
+                  <p className="text-[10px] text-white/30 leading-tight mb-3">Earn 3% back on all services tracked here.</p>
+                  <button className="w-full py-1.5 bg-blue-600/20 text-blue-400 text-[9px] font-black uppercase tracking-widest rounded-lg border border-blue-500/30 hover:bg-blue-600 hover:text-white transition-all">Check Now</button>
+                </div>
+                <div className="mt-2 text-center">
+                  <button onClick={() => setIsPlansOpen(true)} className="text-[7px] font-bold text-white/20 hover:text-white/40 transition-colors uppercase tracking-widest underline decoration-white/10">Remove Ads with Pro Plus</button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </aside>
