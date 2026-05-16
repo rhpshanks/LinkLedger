@@ -28,6 +28,8 @@ interface AppContextType {
   setCharityCurrent: (current: number) => void;
   isPremium: boolean;
   setIsPremium: (premium: boolean) => void;
+  inviteCount: number;
+  addInvite: () => void;
   getConvertedAmount: (amount: number, from: string) => number;
 }
 
@@ -65,6 +67,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [charityGoal, setCharityGoal] = useState<number>(() => loadState('ll_charity_goal', 100));
   const [charityCurrent, setCharityCurrent] = useState<number>(() => loadState('ll_charity_current', 0));
   const [isPremium, setIsPremium] = useState<boolean>(() => loadState('ll_is_premium', !!0));
+  const [inviteCount, setInviteCount] = useState<number>(() => loadState('ll_invites', 0));
 
   const rates: Record<string, number> = {
     'USD': 1,
@@ -90,6 +93,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => { localStorage.setItem('ll_charity_goal', JSON.stringify(charityGoal)); }, [charityGoal]);
   useEffect(() => { localStorage.setItem('ll_charity_current', JSON.stringify(charityCurrent)); }, [charityCurrent]);
   useEffect(() => { localStorage.setItem('ll_is_premium', JSON.stringify(isPremium)); }, [isPremium]);
+  useEffect(() => { localStorage.setItem('ll_invites', JSON.stringify(inviteCount)); }, [inviteCount]);
 
   const addCard = (card: Omit<Card, 'id'>) => {
     const id = `card-${uuidv4()}`;
@@ -125,6 +129,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setNodePositions(prev => ({ ...prev, ...positions }));
   };
 
+  const addInvite = () => {
+    setInviteCount(prev => Math.min(5, prev + 1));
+  };
+
   return (
     <AppContext.Provider value={{
       cards, subscriptions, alertsPrefs,
@@ -138,6 +146,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       charityGoal, setCharityGoal,
       charityCurrent, setCharityCurrent,
       isPremium, setIsPremium,
+      inviteCount, addInvite,
       getConvertedAmount
     }}>
       {children}

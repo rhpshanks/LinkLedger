@@ -24,7 +24,7 @@ const SERVICE_HINTS: Record<string, { card: string; benefit: string }> = {
 };
 
 export default function App() {
-  const { cards, subscriptions, clearCard, clearSubscription, updateNodesPositions, currency, creditScore, setCreditScore, isAutoScore, setIsAutoScore, charityGoal, setCharityGoal, charityCurrent, setCharityCurrent, isPremium, getConvertedAmount } = useAppStore();
+  const { cards, subscriptions, clearCard, clearSubscription, updateNodesPositions, currency, creditScore, setCreditScore, isAutoScore, setIsAutoScore, charityGoal, setCharityGoal, charityCurrent, setCharityCurrent, isPremium, setIsPremium, inviteCount, addInvite, getConvertedAmount } = useAppStore();
 
   useEffect(() => {
     if (isAutoScore) {
@@ -64,7 +64,7 @@ export default function App() {
   const [isYearlyBilling, setIsYearlyBilling] = useState(!1);
   const [plansPhase, setPlansPhase] = useState<'pick' | 'unlock'>('pick');
   const [planChoice, setPlanChoice] = useState<'pro' | 'pro_plus'>('pro');
-  const [unlockCode, setUnlockCode] = useState('');
+  
   const [filterType, setFilterType] = useState<'all' | 'alert' | 'soon' | 'high_cost'>('all');
 
   useEffect(() => {
@@ -697,30 +697,39 @@ export default function App() {
          {plansPhase === 'unlock' && (
            <div className="space-y-6 p-2">
               <div className="p-4 rounded-xl bg-blue-600/5 border border-blue-500/20 text-xs text-center">
-                 <div className="font-bold text-blue-400 uppercase mb-4">Support on Patreon</div>
-                 <a href="https://patreon.com" target="_blank" rel="noopener noreferrer" className="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-500 shift-anim mb-2">Visit Patreon</a>
-                 <p className="text-white/50 text-[10px]">Once joined, you will get a Secret Code to unlock Pro logic.</p>
+                 <div className="font-bold text-blue-400 uppercase mb-4">Invite 5 Contacts</div>
+                 <p className="text-white/50 text-[10px] mb-4">Copy your link and send it to 5 contacts to unlock Pro logic.</p>
+                 <button 
+                  onClick={() => {
+                    addInvite();
+                    navigator.clipboard.writeText('https://linkledger.app/invite/x7y9z');
+                  }}
+                  className="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-500 shift-anim mb-2"
+                 >
+                   Copy Invite Link
+                 </button>
               </div>
-              <div>
-                 <label className="label-base">Insert Secret Code</label>
-                 <input value={unlockCode} onChange={e => setUnlockCode(e.target.value)} className="input-base" placeholder="CODE-PRO" />
+              <div className="text-center">
+                 <div className="text-[10px] uppercase ls-wide text-white/40 font-bold mb-2">Invites Sent</div>
+                 <div className="text-2xl font-black text-[#E0E0E6]">{inviteCount} of 5</div>
+                 <div className="w-full bg-white/10 h-2 rounded-full mt-3 overflow-hidden">
+                    <div className="h-full bg-blue-500 shift-anim" style={{ width: `${(inviteCount / 5) * 100}%` }} />
+                 </div>
               </div>
               <div className="flex gap-3">
                  <button onClick={() => setPlansPhase('pick')} className="flex-1 py-3 rounded-xl bg-white/5 text-white/60 text-xs font-bold uppercase ls-wide hover:bg-white/10 shift-anim">Go Back</button>
                  <button 
                   onClick={() => { 
-                    if (unlockCode === 'CODE-PRO' || unlockCode === 'CODE-PLUS') {
+                    if (inviteCount >= 5) {
                       setIsPremium(!0);
-                      alert('Code Validated! Pro Unlocked.');
                       setIsPlansOpen(!1);
                       setPlansPhase('pick');
-                    } else {
-                      alert('Invalid Code. Check again.');
                     }
                   }}
-                  className="flex-2 py-3 rounded-xl bg-blue-600 text-white text-xs font-bold uppercase ls-wide hover:bg-blue-500 shift-anim shadow-lg shadow-blue-600/20"
+                  disabled={inviteCount < 5}
+                  className={`flex-2 py-3 rounded-xl text-xs font-bold uppercase ls-wide shift-anim shadow-lg ${inviteCount >= 5 ? 'bg-blue-600 text-white hover:bg-blue-500 shadow-blue-600/20' : 'bg-white/5 text-white/20 cursor-not-allowed'}`}
                  >
-                   Verify Secret
+                   Claim PRO
                  </button>
               </div>
            </div>
