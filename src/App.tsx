@@ -177,11 +177,11 @@ export default function App() {
                 <div className="p-6 flex-1 overflow-y-auto">
                    <div className="grid grid-cols-2 gap-4 mb-8">
                      <div>
-                       <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">Monthly Estimate</div>
+                       <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">Monthly Projection</div>
                        <div className="text-2xl font-light text-[#E0E0E6]">{monthlyCardTotal.toFixed(2)} {currency}</div>
                      </div>
                      <div>
-                       <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">Annual Estimate</div>
+                       <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">Annual Projection</div>
                        <div className="text-2xl font-light text-[#E0E0E6]">{annualCardTotal.toFixed(2)} {currency}</div>
                      </div>
                    </div>
@@ -227,7 +227,7 @@ export default function App() {
 
                    <div className="flex items-center gap-4 py-4 border-y border-white/10">
                       <div className="flex-1">
-                         <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">Estimated Fee</div>
+                         <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">Planned Fee</div>
                          <div className="text-xl font-mono tracking-tight text-[#E0E0E6]">{selectedSub.amount} {currency}</div>
                       </div>
                       <div className="flex-1 border-l border-white/10 pl-4">
@@ -271,7 +271,7 @@ export default function App() {
                    )}
                 </div>
                 <div className="p-6 border-t border-white/10 mt-auto flex gap-3">
-                    <button className="flex-1 btn-secondary text-sm" onClick={() => setIsEditSubOpen(true)}>Edit</button>
+                    <button className="flex-1 btn-secondary text-sm" onClick={() => setIsEditSubOpen(true)}>Modify</button>
                     <button 
                       onClick={() => { removeSubscription(selectedSub.id); setSelectedSubId(null); }}
                       className="flex-1 btn-danger text-sm"
@@ -293,7 +293,7 @@ export default function App() {
          <AddSubForm onClose={() => setIsAddSubOpen(false)} initialCardId={selectedCardId || undefined} />
       </Modal>
 
-      <Modal isOpen={isEditSubOpen && !!selectedSub} onClose={() => setIsEditSubOpen(false)} title="Edit Service">
+      <Modal isOpen={isEditSubOpen && !!selectedSub} onClose={() => setIsEditSubOpen(false)} title="Modify Service">
          <AddSubForm onClose={() => setIsEditSubOpen(false)} sub={selectedSub} />
       </Modal>
 

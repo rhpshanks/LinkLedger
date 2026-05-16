@@ -15,7 +15,7 @@ export function CardNode({ data }: { data: Card & { isAlert: boolean, onClick: (
       <div className="flex justify-between items-start mb-4">
         <span className="text-[10px] uppercase font-mono text-white/40">{data.label}</span>
         {data.isAlert ? (
-          <span className="px-1.5 py-0.5 bg-red-500/20 text-red-400 text-[9px] rounded font-bold uppercase">Budget Exceeded</span>
+          <span className="px-1.5 py-0.5 bg-red-500/20 text-red-400 text-[9px] rounded font-bold uppercase">Budget Surpassed</span>
         ) : (
           <span className="px-1.5 py-0.5 bg-blue-500/20 text-blue-400 text-[9px] rounded font-bold uppercase" style={{ color: data.color ? data.color : undefined, backgroundColor: data.color ? `${data.color}33` : undefined }}>{data.type}</span>
         )}

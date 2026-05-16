@@ -22,7 +22,7 @@ export function AddCardForm({ onClose }: { onClose: () => void }) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label className="label-base">Source Label</label>
-        <input name="label" required placeholder="e.g. Operations Card" className="input-base" />
+        <input name="label" required placeholder="like Operations Card" className="input-base" />
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
@@ -40,7 +40,7 @@ export function AddCardForm({ onClose }: { onClose: () => void }) {
       </div>
       <div>
         <label className="label-base">Planned Budget alerts (Optional, {currency})</label>
-        <input name="limit" type="number" min="0" placeholder="e.g. 5000" className="input-base" />
+        <input name="limit" type="number" min="0" placeholder="like 5000" className="input-base" />
       </div>
       <div>
         <label className="label-base">Color Profile</label>
@@ -89,7 +89,7 @@ export function AddSubForm({ onClose, initialCardId, sub }: { onClose: () => voi
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label className="label-base">Service Name</label>
-        <input name="serviceName" required defaultValue={sub?.serviceName} placeholder="e.g. Adobe Creative Cloud" className="input-base" />
+        <input name="serviceName" required defaultValue={sub?.serviceName} placeholder="like Adobe Creative Cloud" className="input-base" />
       </div>
       <div>
         <label className="label-base">Website URL (Optional)</label>
@@ -97,7 +97,7 @@ export function AddSubForm({ onClose, initialCardId, sub }: { onClose: () => voi
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="label-base">Estimated Fee ({currency})</label>
+          <label className="label-base">Planned Fee ({currency})</label>
           <input name="amount" type="number" step="0.01" min="0" required defaultValue={sub?.amount} placeholder="54.99" className="input-base" />
         </div>
         <div>
@@ -152,7 +152,7 @@ export function SettingsForm({ onClose }: { onClose: () => void }) {
         <select name="currency" className="input-base" defaultValue={currency}>
           <option value="cash">cash</option>
           <option value="USD">USD</option>
-          <option value="EUR">EUR</option>
+
           <option value="GBP">GBP</option>
           <option value="JPY">JPY</option>
           <option value="INR">INR</option>
@@ -176,7 +176,7 @@ export function SettingsForm({ onClose }: { onClose: () => void }) {
         </label>
         <label className="flex items-center gap-2">
           <input type="checkbox" name="notifyEmail" defaultChecked={alertsPrefs.notifyEmail} className="rounded border-white/10 text-blue-500 focus:ring-blue-500 bg-[#0E0E12]" />
-          <span className="text-sm">Inbox Message (Email)</span>
+          <span className="text-sm">Inbox Message (Mail)</span>
         </label>
       </div>
       <div className="pt-4 flex justify-end gap-3">
