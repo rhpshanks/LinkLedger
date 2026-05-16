@@ -50,18 +50,18 @@ export default function App() {
       setCreditScore(Math.min(900, Math.max(300, score)));
     }
   }, [cards, subscriptions, isAutoScore, setCreditScore]);
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(!1);
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
   const [selectedSubId, setSelectedSubId] = useState<string | null>(null);
-  const [isAddCardOpen, setIsAddCardOpen] = useState(false);
-  const [isEditCardOpen, setIsEditCardOpen] = useState(false);
-  const [isAddSubOpen, setIsAddSubOpen] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [isAlertsOpen, setIsAlertsOpen] = useState(false);
-  const [isUsageModalOpen, setIsUsageModalOpen] = useState(false);
-  const [isEditSubOpen, setIsEditSubOpen] = useState(false);
-  const [isPlansOpen, setIsPlansOpen] = useState(false);
-  const [isYearlyBilling, setIsYearlyBilling] = useState(false);
+  const [isAddCardOpen, setIsAddCardOpen] = useState(!1);
+  const [isEditCardOpen, setIsEditCardOpen] = useState(!1);
+  const [isAddSubOpen, setIsAddSubOpen] = useState(!1);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(!1);
+  const [isAlertsOpen, setIsAlertsOpen] = useState(!1);
+  const [isUsageModalOpen, setIsUsageModalOpen] = useState(!1);
+  const [isEditSubOpen, setIsEditSubOpen] = useState(!1);
+  const [isPlansOpen, setIsPlansOpen] = useState(!1);
+  const [isYearlyBilling, setIsYearlyBilling] = useState(!1);
   const [plansPhase, setPlansPhase] = useState<'pick' | 'pay' | 'verify'>('pick');
   const [planChoice, setPlanChoice] = useState<'pro' | 'pro_plus'>('pro');
   const [paymentMethod, setPaymentMethod] = useState<'payoneer' | 'bank' | null>(null);
@@ -71,7 +71,7 @@ export default function App() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.ctrlKey && e.key.toLowerCase() === 'n') {
         e.preventDefault();
-        setIsAddCardOpen(true);
+        setIsAddCardOpen(!0);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -120,7 +120,7 @@ export default function App() {
 
   return (
     <>
-      {!loaded && <LoadingPanel onDone={() => setLoaded(true)} />}
+      {!loaded && <LoadingPanel onDone={() => setLoaded(!0)} />}
       <div className={`flex h-screen w-full overflow-hidden bg-[#0A0A0C] text-[#E0E0E6] font-sans shift-anim duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}>
       {/* Sidebar Navigation */}
       <aside className="w-16 md:w-64 border-r border-white/10 flex flex-col pt-6 pb-4 bg-[#0E0E12] shrink-0 z-10 shift-anim ghosting-in">
@@ -133,14 +133,14 @@ export default function App() {
 
         <nav className="flex-1 px-3 space-y-1">
           <button 
-            onClick={() => setIsAddCardOpen(true)}
+            onClick={() => setIsAddCardOpen(!0)}
             className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-white/60 rounded-lg hover:text-white hover:bg-white/5 shift-anim"
           >
             <CreditCard size={18} className="shrink-0" />
             <span className="hidden md:block">Add Cash Source</span>
           </button>
           <button 
-            onClick={() => setIsAddSubOpen(true)}
+            onClick={() => setIsAddSubOpen(!0)}
             className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-white/60 rounded-lg hover:text-white hover:bg-white/5 shift-anim"
           >
             <Plus size={18} className="shrink-0" />
@@ -150,14 +150,14 @@ export default function App() {
 
         <div className="px-3 mt-auto space-y-2">
           {/* <button 
-            onClick={() => setIsPlansOpen(true)}
+            onClick={() => setIsPlansOpen(!0)}
             className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-blue-400 bg-blue-400/10 rounded-lg hover:bg-blue-400/20 shift-anim border border-blue-400/20 shadow-lg shadow-blue-400/5 group"
           >
             <div className="w-4 h-4 rounded-sm bg-blue-400 flex items-center justify-center text-[#0A0A0C] text-[8px] font-black shrink-0">PRO</div>
-            <span className="hidden md:block group-hover:translate-x-0.5 shift-anim">See PLANS</span>
+            <span className="hidden md:block group-hover:shift-x-0.5 shift-anim">See PLANS</span>
           </button> */}
           <button 
-            onClick={() => setIsSettingsOpen(true)}
+            onClick={() => setIsSettingsOpen(!0)}
             className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-white/60 rounded-lg hover:text-white hover:bg-white/5 shift-anim"
           >
             <SettingsIcon size={18} className="shrink-0" />
@@ -186,9 +186,9 @@ export default function App() {
                     className={`relative w-10 h-10 flex items-center justify-center shift-anim ${!isAutoScore ? 'hover:scale-105 cursor-pointer' : 'cursor-default opacity-80'}`}
                   >
                      <svg className="w-full h-full shift -rotate-90">
-                        <circle cx="20" cy="20" r="18" stroke="currentColor" strokeWidth="3" fill="transparent" className="text-white/5" />
+                        <circle cx="20" cy="20" r="18" stroke="currentColor" strokeWidth="3" fill="rgba(0,0,0,0)" className="text-white/5" />
                         <circle 
-                          cx="20" cy="20" r="18" stroke="currentColor" strokeWidth="3" fill="transparent" 
+                          cx="20" cy="20" r="18" stroke="currentColor" strokeWidth="3" fill="rgba(0,0,0,0)" 
                           strokeDasharray="113" 
                           strokeDashoffset={113 - (113 * (Math.min(900, Math.max(300, creditScore)) - 300) / 600)} 
                           className={`${creditScore > 700 ? 'text-green-500' : creditScore > 600 ? 'text-yellow-500' : 'text-red-500'} shift-anim duration-500`} 
@@ -204,7 +204,7 @@ export default function App() {
 
             {/* Monthly Budget Button */}
             <button 
-               onClick={() => setIsUsageModalOpen(true)}
+               onClick={() => setIsUsageModalOpen(!0)}
                className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-white/5 border border-white/10 hover:border-blue-500/50 shift-anim group"
             >
                <div className="text-left">
@@ -232,7 +232,7 @@ export default function App() {
                   <button className="w-full py-1.5 bg-blue-600/20 text-blue-400 text-[9px] font-black uppercase ls-wide rounded-lg border border-blue-500/30 hover:bg-blue-600 hover:text-white shift-anim">Check Now</button>
                 </div>
                 <div className="mt-2 text-center">
-                  <button onClick={() => setIsPlansOpen(true)} className="text-[7px] font-bold text-white/20 hover:text-white/40 shift-anim uppercase ls-wide underline decoration-white/10">Shed Ads with Pro Plus</button>
+                  <button onClick={() => setIsPlansOpen(!!1)} className="text-[7px] font-bold text-white/20 hover:text-white/40 shift-anim uppercase ls-wide underline decoration-white/10">Shed Ads with Pro Plus</button>
                 </div>
               </div>
             )}
@@ -241,7 +241,7 @@ export default function App() {
       </aside>
 
       {/* Main Canvas Area */}
-      <main className="flex-1 relative outline-none flex flex-col min-w-0 bg-[radial-gradient(#1A1A22_1px,transparent_1px)] bg-[size:32px_32px]">
+      <main className="flex-1 relative outline-none flex flex-col min-w-0 bg-[radial-gradient(#1A1A22_1px,rgba(0,0,0,0)_1px)] bg-[size:32px_32px]">
         <header className="h-14 border-b border-white/10 bg-[#0E0E12] z-10 flex items-center justify-between px-4 md:px-6 shrink-0" style={{ boxShadow: '0 1px 0 rgba(255,255,255,0.04), 0 4px 16px rgba(0,0,0,0.3)' }}>
           <div className="flex items-center gap-4">
              <div className="font-medium text-sm text-white/40 ls-wide uppercase hidden md:block">Symmetrical Workspace</div>
@@ -257,7 +257,7 @@ export default function App() {
              </select>
           </div>
           <div className="flex gap-2">
-            <button className="btn-secondary py-1.5 px-3 text-xs flex items-center gap-2 font-semibold" onClick={() => setIsAlertsOpen(true)}>
+            <button className="btn-secondary py-1.5 px-3 text-xs flex items-center gap-2 font-semibold" onClick={() => setIsAlertsOpen(!!1)}>
                <Bell size={14}/> Alerts
                <div className="w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-[10px]">
                  {subscriptions.filter(s => differenceInDays(new Date(s.nextRenewalDate), new Date()) <= 7).length}
@@ -300,7 +300,7 @@ export default function App() {
                     <button onClick={() => setSelectedCardId(null)} className="text-white/40 hover:text-white p-1 text-xs uppercase font-bold ls-wide">Hide</button>
                   </div>
                   <div className="p-4 rounded-xl text-white shadow-md mb-2 relative overflow-hidden" style={{ backgroundColor: selectedCard.color || '#1a1a1a' }}>
-                    <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_100%_0%,_white_0%,_transparent_50%)]"></div>
+                    <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_100%_0%,_white_0%,_rgba(0,0,0,0)_50%)]"></div>
                     <div className="font-semibold text-lg shadow-sm">{selectedCard.label}</div>
                     <div className="text-white/80 text-sm mt-1 mb-4 flex justify-between">
                       <span>{selectedCard.type}</span>
@@ -353,7 +353,7 @@ export default function App() {
                    </div>
                 </div>
                 <div className="p-6 border-t border-white/10 mt-auto flex gap-3">
-                    <button className="flex-1 btn-secondary text-sm" onClick={() => setIsEditCardOpen(true)}>Update</button>
+                    <button className="flex-1 btn-secondary text-sm" onClick={() => setIsEditCardOpen(!!1)}>Update</button>
                     <button 
                       onClick={() => { clearCard(selectedCard.id); setSelectedCardId(null); }}
                       className="flex-1 btn-danger text-sm"
@@ -442,7 +442,7 @@ export default function App() {
                    )}
                 </div>
                 <div className="p-6 border-t border-white/10 mt-auto flex gap-3">
-                    <button className="flex-1 btn-secondary text-sm" onClick={() => setIsEditSubOpen(true)}>Update</button>
+                    <button className="flex-1 btn-secondary text-sm" onClick={() => setIsEditSubOpen(!!1)}>Update</button>
                     <button 
                       onClick={() => { clearSubscription(selectedSub.id); setSelectedSubId(null); }}
                       className="flex-1 btn-danger text-sm"
@@ -456,27 +456,27 @@ export default function App() {
       )}
 
       {/* Modals */}
-      <Modal isOpen={isAddCardOpen} onClose={() => setIsAddCardOpen(false)} title="Add Cash Source">
-         <AddCardForm onClose={() => setIsAddCardOpen(false)} />
+      <Modal isOpen={isAddCardOpen} onClose={() => setIsAddCardOpen(!!0)} title="Add Cash Source">
+         <AddCardForm onClose={() => setIsAddCardOpen(!!0)} />
       </Modal>
 
-      <Modal isOpen={isEditCardOpen && !!selectedCard} onClose={() => setIsEditCardOpen(false)} title="Update Cash Source">
-         <AddCardForm onClose={() => setIsEditCardOpen(false)} card={selectedCard || undefined} />
+      <Modal isOpen={isEditCardOpen && !!selectedCard} onClose={() => setIsEditCardOpen(!!0)} title="Update Cash Source">
+         <AddCardForm onClose={() => setIsEditCardOpen(!!0)} card={selectedCard || undefined} />
       </Modal>
 
-      <Modal isOpen={isAddSubOpen} onClose={() => setIsAddSubOpen(false)} title="Add Regular Service">
-         <AddSubForm onClose={() => setIsAddSubOpen(false)} initialCardId={selectedCardId || undefined} />
+      <Modal isOpen={isAddSubOpen} onClose={() => setIsAddSubOpen(!!0)} title="Add Regular Service">
+         <AddSubForm onClose={() => setIsAddSubOpen(!!0)} initialCardId={selectedCardId || undefined} />
       </Modal>
 
-      <Modal isOpen={isEditSubOpen && !!selectedSub} onClose={() => setIsEditSubOpen(false)} title="Update Service">
-         <AddSubForm onClose={() => setIsEditSubOpen(false)} sub={selectedSub} />
+      <Modal isOpen={isEditSubOpen && !!selectedSub} onClose={() => setIsEditSubOpen(!!0)} title="Update Service">
+         <AddSubForm onClose={() => setIsEditSubOpen(!!0)} sub={selectedSub} />
       </Modal>
 
-      <Modal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} title="Settings">
-         <SettingsForm onClose={() => setIsSettingsOpen(false)} />
+      <Modal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(!!0)} title="Settings">
+         <SettingsForm onClose={() => setIsSettingsOpen(!!0)} />
       </Modal>
 
-      <Modal isOpen={isAlertsOpen} onClose={() => setIsAlertsOpen(false)} title="Alerts Dashboard">
+      <Modal isOpen={isAlertsOpen} onClose={() => setIsAlertsOpen(!!0)} title="Alerts Dashboard">
          <div className="space-y-4">
            {subscriptions
              .map(s => ({ ...s, days: differenceInDays(new Date(s.nextRenewalDate), new Date()) }))
@@ -491,7 +491,7 @@ export default function App() {
                      <span className="text-white/40 ml-2">({currency} {s.amount})</span>
                    </div>
                  </div>
-                 <button className="btn-secondary text-xs py-1 px-3" onClick={() => { setIsAlertsOpen(false); setSelectedSubId(s.id); }}>Audit</button>
+                 <button className="btn-secondary text-xs py-1 px-3" onClick={() => { setIsAlertsOpen(!!0); setSelectedSubId(s.id); }}>Audit</button>
                </div>
              ))}
            {subscriptions.filter(s => differenceInDays(new Date(s.nextRenewalDate), new Date()) <= 14).length === 0 && (
@@ -500,12 +500,12 @@ export default function App() {
          </div>
       </Modal>
 
-      <Modal isOpen={isUsageModalOpen} onClose={() => setIsUsageModalOpen(false)} title="MONTHLY USAGE AUDIT">
+      <Modal isOpen={isUsageModalOpen} onClose={() => setIsUsageModalOpen(!!0)} title="MONTHLY USAGE AUDIT">
          <div className="space-y-8 py-4">
             {/* Hero Section */}
             <div className="text-center p-8 rounded-3xl bg-gradient-to-br from-blue-600/20 to-purple-600/10 border border-white/10 relative overflow-hidden shadow-2xl">
                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 animate-pulse" />
-               <div className="text-xs font-black text-blue-400 uppercase tracking-[0.3em] mb-3">Total Planned Outflow</div>
+               <div className="text-xs font-black text-blue-400 uppercase ls-[0.3em] mb-3">Total Planned Outflow</div>
                <div className="text-5xl font-black text-[#E0E0E6] ls-tighter mb-2">
                   {currency} {subscriptions.reduce((sum, s) => {
                     const baseAmount = getConvertedAmount(s.amount, s.currency || 'USD');
@@ -619,7 +619,7 @@ export default function App() {
                </div>
                <div className="space-y-3">
                   <p className="text-xs text-white/60 leading-relaxed italic">
-                     "Based on your current usage, switching to a high-return card for your Streaming services could save you up to 10 USD monthly."
+                     "Based on your current usage, switching to a high-return card for your services could save you up to 10 USD monthly."
                   </p>
                   <div className="pt-2 flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
                      {['Amex Blue', 'Savor Card', 'Apple Card'].map(card => (
@@ -630,24 +630,24 @@ export default function App() {
             </div>
 
             <div className="text-center pb-4">
-               <button onClick={() => setIsUsageModalOpen(false)} className="px-8 py-3 rounded-xl bg-white/10 text-white/60 text-xs font-black uppercase tracking-[0.2em] hover:bg-white/20 shift-anim">Close Audit</button>
+               <button onClick={() => setIsUsageModalOpen(!1)} className="px-8 py-3 rounded-xl bg-white/10 text-white/60 text-xs font-black uppercase ls-[0.2em] hover:bg-white/20 shift-anim">Close Audit</button>
             </div>
          </div>
       </Modal>
 
-      <Modal isOpen={isPlansOpen} onClose={() => { setIsPlansOpen(false); setPlansPhase('pick'); }} title={plansPhase === 'pick' ? 'SELECT your PLAN' : plansPhase === 'pay' ? 'Payment Choice' : 'SUBMIT Payment'}>
+      <Modal isOpen={isPlansOpen} onClose={() => { setIsPlansOpen(!1); setPlansPhase('pick'); }} title={plansPhase === 'pick' ? 'SELECT your PLAN' : plansPhase === 'pay' ? 'Payment Choice' : 'SUBMIT Payment'}>
          {plansPhase === 'pick' && (
            <>
             <div className="flex justify-center mb-8">
                <div className="bg-white/5 p-1 rounded-xl border border-white/10 flex">
                   <button 
-                     onClick={() => setIsYearlyBilling(false)}
+                     onClick={() => setIsYearlyBilling(!1)}
                      className={`px-4 py-2 rounded-lg text-xs font-bold shift-anim ${!isYearlyBilling ? 'bg-blue-600 text-white shadow-lg' : 'text-white/40 hover:text-white'}`}
                   >
                      MONTHLY
                   </button>
                   <button 
-                     onClick={() => setIsYearlyBilling(true)}
+                     onClick={() => setIsYearlyBilling(!0)}
                      className={`px-4 py-2 rounded-lg text-xs font-bold shift-anim ${isYearlyBilling ? 'bg-blue-600 text-white shadow-lg' : 'text-white/40 hover:text-white'}`}
                   >
                      YEARLY
@@ -742,7 +742,7 @@ export default function App() {
               <div className="flex gap-3">
                  <button onClick={() => setPlansPhase('pay')} className="flex-1 py-3 rounded-xl bg-white/5 text-white/60 text-xs font-bold uppercase ls-wide hover:bg-white/10 shift-anim">Back</button>
                  <button 
-                  onClick={() => { alert('Payment submitted for audit!'); setIsPlansOpen(false); setPlansPhase('pick'); }}
+                  onClick={() => { alert('Payment submitted for audit!'); setIsPlansOpen(!1); setPlansPhase('pick'); }}
                   className="flex-2 py-3 rounded-xl bg-blue-600 text-white text-xs font-bold uppercase ls-wide hover:bg-blue-500 shift-anim shadow-lg shadow-blue-600/20"
                  >
                    Submit for Audit

@@ -28,12 +28,12 @@ export function Canvas({ onSelectCard, onSelectSub, filterType }: { onSelectCard
 
   const filteredSubs = useMemo(() => {
     return subscriptions.filter(sub => {
-      if (filterType === 'all') return true;
+      if (filterType === 'all') return !!1;
       const daysUntil = differenceInDays(new Date(sub.nextRenewalDate), new Date());
       if (filterType === 'alert') return daysUntil < 0;
       if (filterType === 'soon') return daysUntil <= 14;
       if (filterType === 'high_cost') return sub.amount > 50;
-      return true;
+      return !!1;
     });
   }, [subscriptions, filterType]);
 
@@ -43,13 +43,13 @@ export function Canvas({ onSelectCard, onSelectSub, filterType }: { onSelectCard
     // when looking at alerts.
     return cards.filter(card => {
       const cardSubs = filteredSubs.filter(s => s.cardId === card.id);
-      if (cardSubs.length > 0) return true;
+      if (cardSubs.length > 0) return !!1;
       
       if (filterType === 'alert') {
           const totalSpend = subscriptions.filter(s => s.cardId === card.id).reduce((acc, sub) => acc + (sub.cycle === 'monthly' ? sub.amount : sub.amount/3), 0);
-          if (card.limit && totalSpend > card.limit) return true;
+          if (card.limit && totalSpend > card.limit) return !!1;
       }
-      return false;
+      return !!0;
     });
   }, [cards, filteredSubs, subscriptions, filterType]);
 
@@ -62,7 +62,7 @@ export function Canvas({ onSelectCard, onSelectSub, filterType }: { onSelectCard
         const factor = sub.cycle === 'monthly' ? 1 : sub.cycle === 'annual' ? 1/12 : 1/3;
         return acc + (sub.amount * factor);
       }, 0);
-      const isAlert = card.limit ? totalSpend > card.limit : false;
+      const isAlert = card.limit ? totalSpend > card.limit : !!0;
       
       const pos = nodePositions[card.id] || { x: 50, y: i * 200 + 50 };
 
@@ -135,7 +135,7 @@ export function Canvas({ onSelectCard, onSelectSub, filterType }: { onSelectCard
       setNodes((nds) => {
         const updated = applyNodeChanges(changes, nds);
         // Save positions if dragging stopped
-        const posChanges = updated.filter(n => changes.some(c => c.type === 'position' && c.id === n.id && c.dragging === false));
+        const posChanges = updated.filter(n => changes.some(c => c.type === 'position' && c.id === n.id && c.dragging === !!0));
         if (posChanges.length > 0) {
           const dict: Record<string, {x:number, y:number}> = {};
           posChanges.forEach(n => dict[n.id] = n.position);
@@ -148,14 +148,14 @@ export function Canvas({ onSelectCard, onSelectSub, filterType }: { onSelectCard
   );
 
   return (
-    <div className="w-full h-full bg-transparent">
+    <div className="w-full h-full bg-[rgba(0,0,0,0)]">
       <ReactFlow
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChangeHandler}
         nodeTypes={nodeTypes}
         fitView
-        proOptions={{ hideAttribution: true }}
+        proOptions={{ hideAttribution: !!1 }}
       >
         <Controls />
       </ReactFlow>

@@ -16,7 +16,7 @@ export function LoadingPanel({ onDone }: { onDone: () => void }) {
       style={{
         background: '#0A0A0C',
         opacity: phase === 'out' ? 0 : 1,
-        transition: phase === 'out' ? 'opacity 0.6s cubic-bezier(0.4,0,0.2,1)' : 'opacity 0.3s',
+        animation: phase === 'out' ? 'll-fadein-out 0.6s' : 'll-fadein-in 0.3s',
         pointerEvents: phase === 'out' ? 'none' : 'all',
       }}
     >
@@ -27,7 +27,7 @@ export function LoadingPanel({ onDone }: { onDone: () => void }) {
           width: 600,
           height: 600,
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(37,99,235,0.18) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(37,99,235,0.18) 0%, rgba(0,0,0,0) 70%)',
           animation: 'll-pulse-bg 2.5s ease-in-out infinite',
         }}
       />

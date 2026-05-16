@@ -54,17 +54,17 @@ const defaultSubscriptions: Subscription[] = [
 export function AppProvider({ children }: { children: ReactNode }) {
   const [cards, setCards] = useState<Card[]>(() => loadState('ll_cards', defaultCards));
   const [subscriptions, setSubscriptions] = useState<Subscription[]>(() => loadState('ll_subs', defaultSubscriptions));
-  const [alertsPrefs, setAlertsPrefs] = useState<AlertPreference>(() => loadState('ll_alerts', { advanceNoticeDays: 7, notifyInApp: true, notifyEmail: false }));
+  const [alertsPrefs, setAlertsPrefs] = useState<AlertPreference>(() => loadState('ll_alerts', { advanceNoticeDays: 7, notifyInApp: !!1, notifyEmail: !!0 }));
   const [nodePositions, setNodePositions] = useState<Record<string, { x: number; y: number }>>(() => loadState('ll_node_pos', { 'c1': { x: 50, y: 300 }, 's1': { x: 400, y: 300 } }));
   const [currency, setCurrency] = useState<string>(() => {
     const saved = loadState('ll_currency', 'USD');
     return saved === 'cash' ? 'USD' : saved;
   });
   const [creditScore, setCreditScore] = useState<number>(() => loadState('ll_credit_score', 742));
-  const [isAutoScore, setIsAutoScore] = useState<boolean>(() => loadState('ll_auto_score', false));
+  const [isAutoScore, setIsAutoScore] = useState<boolean>(() => loadState('ll_auto_score', !!0));
   const [charityGoal, setCharityGoal] = useState<number>(() => loadState('ll_charity_goal', 100));
   const [charityCurrent, setCharityCurrent] = useState<number>(() => loadState('ll_charity_current', 0));
-  const [isPremium, setIsPremium] = useState<boolean>(() => loadState('ll_is_premium', false));
+  const [isPremium, setIsPremium] = useState<boolean>(() => loadState('ll_is_premium', !!0));
 
   const rates: Record<string, number> = {
     'USD': 1,
