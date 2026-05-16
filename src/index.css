@@ -83,3 +83,31 @@
 .react-flow__controls-button:last-child {
   border-bottom: none;
 }
+/* Subtle Animations */
+@keyframes ghosting {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes sway {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+  100% { transform: translateY(0px); }
+}
+
+.ghosting-in {
+  animation: ghosting 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sway-node {
+  animation: sway 6s ease-in-out infinite;
+}
+
+.pulse-glow {
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+  transition: box-shadow 0.3s ease;
+}
+
+.pulse-glow:hover {
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.4);
+}

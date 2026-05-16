@@ -119,7 +119,7 @@ export default function App() {
       {!loaded && <LoadingScreen onDone={() => setLoaded(true)} />}
       <div className={`flex h-screen w-full overflow-hidden bg-[#0A0A0C] text-[#E0E0E6] font-sans transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}>
       {/* Sidebar Navigation */}
-      <aside className="w-16 md:w-64 border-r border-white/10 flex flex-col pt-6 pb-4 bg-[#0E0E12] shrink-0 z-10 transition-all">
+      <aside className="w-16 md:w-64 border-r border-white/10 flex flex-col pt-6 pb-4 bg-[#0E0E12] shrink-0 z-10 transition-all ghosting-in">
         <div className="px-4 mb-8 flex items-center md:gap-3">
           <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white shrink-0 font-bold shadow-lg shadow-blue-600/30">
             LL

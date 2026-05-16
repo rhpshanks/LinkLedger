@@ -7,7 +7,7 @@ export function CardNode({ data }: { data: Card & { isAlert: boolean, onClick: (
   const { currency } = useAppStore();
   return (
     <div 
-      className={`card flex flex-col p-4 w-52 cursor-pointer hover:scale-105 hover:-translate-y-1 transition-all duration-300 bg-[#1E222D] ${
+      className={`card flex flex-col p-4 w-52 cursor-pointer sway-node hover:!animation-none hover:scale-105 hover:-translate-y-1 transition-all duration-300 bg-[#1E222D] ${
         data.isAlert 
           ? '!border-red-500/60 shadow-lg shadow-red-500/20 hover:shadow-red-500/30' 
           : 'border-blue-500/40 shadow-md shadow-blue-500/10 hover:border-blue-400/70 hover:shadow-blue-500/20 hover:z-50'

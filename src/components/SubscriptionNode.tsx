@@ -13,7 +13,7 @@ export function SubscriptionNode({ data }: { data: Subscription & { onClick: () 
 
   return (
     <div 
-      className={`card flex flex-col p-3 w-56 cursor-pointer hover:scale-105 hover:-translate-y-1 hover:shadow-xl hover:z-50 transition-all duration-300 relative ${
+      className={`card flex flex-col p-3 w-56 cursor-pointer sway-node hover:!animation-none hover:scale-105 hover:-translate-y-1 hover:shadow-xl hover:z-50 transition-all duration-300 relative ${
         data.isPastDue 
           ? '!border-red-500 shadow-lg shadow-red-500/20' 
           : data.isApproaching 
