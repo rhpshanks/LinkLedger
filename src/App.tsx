@@ -12,6 +12,17 @@ import { AddCardForm, AddSubForm, SettingsForm } from './components/forms';
 import { LoadingScreen } from './components/LoadingScreen';
 import { differenceInDays, format } from 'date-fns';
 
+const SERVICE_HINTS: Record<string, { card: string; benefit: string }> = {
+  'netflix': { card: 'Amex Blue Cash', benefit: '6% Cash Back' },
+  'spotify': { card: 'Amex Blue Cash', benefit: '6% Cash Back' },
+  'disney': { card: 'Amex Blue Cash', benefit: '6% Cash Back' },
+  'hulu': { card: 'Amex Blue Cash', benefit: '6% Cash Back' },
+  'apple': { card: 'Apple Card', benefit: '3% Cash Back' },
+  'amazon': { card: 'Amazon Visa', benefit: '5% Cash Back' },
+  'youtube': { card: 'Savor Card', benefit: '3% Cash Back' },
+  'hbo': { card: 'Savor Card', benefit: '3% Cash Back' },
+};
+
 export default function App() {
   const { cards, subscriptions, removeCard, removeSubscription, updateNodesPositions, currency } = useAppStore();
   const [loaded, setLoaded] = useState(false);
@@ -257,6 +268,23 @@ export default function App() {
                   </div>
                 </div>
                 <div className="p-6 flex-1 overflow-y-auto space-y-6">
+                    {(() => {
+                      const hint = Object.entries(SERVICE_HINTS).find(([key]) => 
+                        selectedSub.serviceName.toLowerCase().includes(key)
+                      );
+                      if (hint) {
+                        return (
+                          <div className="p-4 rounded-xl bg-blue-600/5 border border-blue-500/20">
+                            <div className="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-1 text-center">Better Card Choice</div>
+                            <div className="flex justify-between items-center">
+                               <span className="text-sm font-bold text-[#E0E0E6]">{hint[1].card}</span>
+                               <span className="text-[10px] font-black text-green-400 uppercase tracking-tighter bg-green-400/10 px-2 py-0.5 rounded">{hint[1].benefit}</span>
+                            </div>
+                          </div>
+                        );
+                      }
+                      return null;
+                    })()}
                    <div>
                       <div className="text-2xl font-semibold text-[#E0E0E6] mb-1">{selectedSub.serviceName}</div>
                       {selectedSub.url && <a href={selectedSub.url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-400 hover:underline flex items-center gap-1">{selectedSub.url} link</a>}
