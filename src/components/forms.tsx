@@ -2,19 +2,25 @@ import { useState, FormEvent } from 'react';
 import { useAppStore } from '../store';
 import { Card, Subscription } from '../types';
 
-export function AddCardForm({ onClose }: { onClose: () => void }) {
-  const { addCard, currency } = useAppStore();
+export function AddCardForm({ onClose, card }: { onClose: () => void; card?: Card }) {
+  const { addCard, updateCard, currency } = useAppStore();
   
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    addCard({
+    const data = {
       label: formData.get('label') as string,
       last4: formData.get('last4') as string,
       type: formData.get('type') as string,
       limit: formData.get('limit') ? Number(formData.get('limit')) : undefined,
       color: formData.get('color') as string || '#000',
-    });
+    };
+
+    if (card) {
+      updateCard(card.id, data);
+    } else {
+      addCard(data);
+    }
     onClose();
   };
 
@@ -22,16 +28,16 @@ export function AddCardForm({ onClose }: { onClose: () => void }) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label className="label-base">Source Label</label>
-        <input name="label" required placeholder="like Operations Card" className="input-base" />
+        <input name="label" required defaultValue={card?.label} placeholder="like Operations Card" className="input-base" />
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="label-base">Last 4 Digits</label>
-          <input name="last4" required maxLength={4} pattern="\d{4}" placeholder="1234" className="input-base" />
+          <input name="last4" required maxLength={4} defaultValue={card?.last4} pattern="\d{4}" placeholder="1234" className="input-base" />
         </div>
         <div>
           <label className="label-base">Source Type</label>
-          <select name="type" className="input-base">
+          <select name="type" className="input-base" defaultValue={card?.type}>
             <option value="Visa">Visa</option>
             <option value="Bank Card">Bank Card</option>
             <option value="Amex">Amex</option>
@@ -40,7 +46,7 @@ export function AddCardForm({ onClose }: { onClose: () => void }) {
       </div>
       <div>
         <label className="label-base">Planned Budget alerts (Optional, {currency})</label>
-        <input name="limit" type="number" min="0" placeholder="like 5000" className="input-base" />
+        <input name="limit" type="number" min="0" defaultValue={card?.limit} placeholder="like 5000" className="input-base" />
       </div>
       <div>
         <label className="label-base">Color Profile</label>
@@ -55,7 +61,7 @@ export function AddCardForm({ onClose }: { onClose: () => void }) {
       </div>
       <div className="pt-4 flex justify-end gap-3">
         <button type="button" onClick={onClose} className="btn-secondary">Cancel</button>
-        <button type="submit" className="btn-primary">Save Source</button>
+        <button type="submit" className="btn-primary">{card ? 'Update Source' : 'Save Source'}</button>
       </div>
     </form>
   )

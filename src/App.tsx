@@ -54,6 +54,7 @@ export default function App() {
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
   const [selectedSubId, setSelectedSubId] = useState<string | null>(null);
   const [isAddCardOpen, setIsAddCardOpen] = useState(false);
+  const [isEditCardOpen, setIsEditCardOpen] = useState(false);
   const [isAddSubOpen, setIsAddSubOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isAlertsOpen, setIsAlertsOpen] = useState(false);
@@ -320,15 +321,16 @@ export default function App() {
                      </div>
                    </div>
                 </div>
-                <div className="p-6 border-t border-white/10 mt-auto">
+                <div className="p-6 border-t border-white/10 mt-auto flex gap-3">
+                    <button className="flex-1 btn-secondary text-sm" onClick={() => setIsEditCardOpen(true)}>Update</button>
                     <button 
                       onClick={() => { removeCard(selectedCard.id); setSelectedCardId(null); }}
-                      className="w-full btn-danger text-sm"
+                      className="flex-1 btn-danger text-sm"
                     >
                       Remove Source
                     </button>
-                    <p className="text-[10px] text-white/40 text-center mt-2">Unlinks all subscriptions</p>
                 </div>
+                <p className="text-[10px] text-white/40 text-center mt-2 pb-6">Unlinks all subscriptions</p>
              </div>
            )}
 
@@ -425,6 +427,10 @@ export default function App() {
       {/* Modals */}
       <Modal isOpen={isAddCardOpen} onClose={() => setIsAddCardOpen(false)} title="Add Cash Source">
          <AddCardForm onClose={() => setIsAddCardOpen(false)} />
+      </Modal>
+
+      <Modal isOpen={isEditCardOpen && !!selectedCard} onClose={() => setIsEditCardOpen(false)} title="Update Cash Source">
+         <AddCardForm onClose={() => setIsEditCardOpen(false)} card={selectedCard || undefined} />
       </Modal>
 
       <Modal isOpen={isAddSubOpen} onClose={() => setIsAddSubOpen(false)} title="Add Regular Service">
