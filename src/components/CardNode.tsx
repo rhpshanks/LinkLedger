@@ -35,7 +35,7 @@ export function CardNode({ data }: { data: Card & { isAlert: boolean, onClick: (
 
       {data.limit && (
         <div className="mt-4 pt-3 border-t border-white/5 flex justify-between items-end">
-          <span className={`text-[10px] ${data.isAlert ? 'text-red-400 font-semibold' : 'text-white/40'}`}>Budget: {currency} {data.limit.toLocaleString()} MONTHLY</span>
+          <span className={`text-[10px] ${data.isAlert ? 'text-red-400 font-semibold' : 'text-white/40'}`}>Budget: {currency} {data.limit.toLocaleString()} 30 DAY</span>
           {data.isAlert && <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />}
         </div>
       )}

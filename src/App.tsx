@@ -91,14 +91,14 @@ export default function App() {
             className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-white/60 rounded-lg hover:text-white hover:bg-white/5 transition-all"
           >
             <CreditCard size={18} className="shrink-0" />
-            <span className="hidden md:block">Add Funding Source</span>
+            <span className="hidden md:block">Add Cash Source</span>
           </button>
           <button 
             onClick={() => setIsAddSubOpen(true)}
             className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-white/60 rounded-lg hover:text-white hover:bg-white/5 transition-all"
           >
             <Plus size={18} className="shrink-0" />
-            <span className="hidden md:block">Add Recurring Service</span>
+            <span className="hidden md:block">Add Regular Service</span>
           </button>
         </nav>
 
@@ -146,8 +146,8 @@ export default function App() {
               <div className="w-16 h-16 rounded-2xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center mb-2">
                 <CreditCard size={28} className="text-blue-400/60" />
               </div>
-              <div className="text-white/50 font-semibold text-base">No funding sources yet</div>
-              <div className="text-white/25 text-sm max-w-xs">Add a funding source from the sidebar to get started. Link your recurring services to it on the canvas.</div>
+              <div className="text-white/50 font-semibold text-base">No cash sources yet</div>
+              <div className="text-white/25 text-sm max-w-xs">Add a cash source from the sidebar to get started. Link your regular services to it on the canvas.</div>
               <div className="text-[10px] text-white/20 uppercase tracking-widest mt-2">Ctrl N to add a source</div>
             </div>
           ) : (
@@ -169,7 +169,7 @@ export default function App() {
              <div className="flex flex-col h-full">
                 <div className="p-6 border-b border-white/10">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-xl font-black font-serif tracking-tight text-[#E0E0E6]">Funding Source Summary</h2>
+                    <h2 className="text-xl font-black font-serif tracking-tight text-[#E0E0E6]">Cash Source Summary</h2>
                     <button onClick={() => setSelectedCardId(null)} className="text-white/40 hover:text-white p-1 text-xs uppercase font-bold tracking-wider">Hide</button>
                   </div>
                   <div className="p-4 rounded-xl text-white shadow-md mb-2 relative overflow-hidden" style={{ backgroundColor: selectedCard.color || '#1a1a1a' }}>
@@ -184,7 +184,7 @@ export default function App() {
                     <div className="mt-4 p-3 rounded-lg bg-white/5 border border-white/10 text-sm text-white/60 flex justify-between items-center">
                       <span className="font-semibold">Planned Budget</span>
                       <span className={`font-bold ${monthlyCardTotal > selectedCard.limit ? 'text-red-400' : 'text-green-400'}`}>
-                        {currency} {selectedCard.limit.toLocaleString()} MONTHLY
+                        {currency} {selectedCard.limit.toLocaleString()} 30 DAY
                       </span>
                     </div>
                   )}
@@ -192,11 +192,11 @@ export default function App() {
                 <div className="p-6 flex-1 overflow-y-auto">
                    <div className="grid grid-cols-2 gap-4 mb-8">
                      <div>
-                       <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">Monthly Projection</div>
+                       <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">30 Day Projection</div>
                        <div className="text-2xl font-light text-[#E0E0E6]">{currency} {monthlyCardTotal.toFixed(2)}</div>
                      </div>
                      <div>
-                       <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">Annual Projection</div>
+                       <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">Yearly Projection</div>
                        <div className="text-2xl font-light text-[#E0E0E6]">{currency} {annualCardTotal.toFixed(2)}</div>
                      </div>
                    </div>
@@ -242,7 +242,7 @@ export default function App() {
 
                    <div className="flex items-center gap-4 py-4 border-y border-white/10">
                       <div className="flex-1">
-                         <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">Planned Fee</div>
+                         <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">Planned Cost</div>
                          <div className="text-xl font-mono tracking-tight text-[#E0E0E6]">{currency} {selectedSub.amount}</div>
                       </div>
                       <div className="flex-1 border-l border-white/10 pl-4">
@@ -267,7 +267,7 @@ export default function App() {
 
                    {selectedSub.cardId && (
                      <div>
-                        <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-2">Funding Source</div>
+                        <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-2">Cash Source</div>
                         {cards.find(c => c.id === selectedSub.cardId) ? (
                           <div 
                             className="flex items-center gap-3 p-3 bg-[#15171E] border border-white/10 rounded-lg cursor-pointer hover:border-blue-500/50 transition-colors shadow-sm"
@@ -286,7 +286,7 @@ export default function App() {
                    )}
                 </div>
                 <div className="p-6 border-t border-white/10 mt-auto flex gap-3">
-                    <button className="flex-1 btn-secondary text-sm" onClick={() => setIsEditSubOpen(true)}>Modify</button>
+                    <button className="flex-1 btn-secondary text-sm" onClick={() => setIsEditSubOpen(true)}>Update</button>
                     <button 
                       onClick={() => { removeSubscription(selectedSub.id); setSelectedSubId(null); }}
                       className="flex-1 btn-danger text-sm"
@@ -300,15 +300,15 @@ export default function App() {
       )}
 
       {/* Modals */}
-      <Modal isOpen={isAddCardOpen} onClose={() => setIsAddCardOpen(false)} title="Add Funding Source">
+      <Modal isOpen={isAddCardOpen} onClose={() => setIsAddCardOpen(false)} title="Add Cash Source">
          <AddCardForm onClose={() => setIsAddCardOpen(false)} />
       </Modal>
 
-      <Modal isOpen={isAddSubOpen} onClose={() => setIsAddSubOpen(false)} title="Add Recurring Service">
+      <Modal isOpen={isAddSubOpen} onClose={() => setIsAddSubOpen(false)} title="Add Regular Service">
          <AddSubForm onClose={() => setIsAddSubOpen(false)} initialCardId={selectedCardId || undefined} />
       </Modal>
 
-      <Modal isOpen={isEditSubOpen && !!selectedSub} onClose={() => setIsEditSubOpen(false)} title="Modify Service">
+      <Modal isOpen={isEditSubOpen && !!selectedSub} onClose={() => setIsEditSubOpen(false)} title="Update Service">
          <AddSubForm onClose={() => setIsEditSubOpen(false)} sub={selectedSub} />
       </Modal>
 

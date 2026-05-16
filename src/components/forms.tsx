@@ -33,7 +33,7 @@ export function AddCardForm({ onClose }: { onClose: () => void }) {
           <label className="label-base">Source Type</label>
           <select name="type" className="input-base">
             <option value="Visa">Visa</option>
-            <option value="Mastercard">Mastercard</option>
+            <option value="Bank Card">Bank Card</option>
             <option value="Amex">Amex</option>
           </select>
         </div>
@@ -97,15 +97,15 @@ export function AddSubForm({ onClose, initialCardId, sub }: { onClose: () => voi
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="label-base">Planned Fee ({currency})</label>
+          <label className="label-base">Planned Cost ({currency})</label>
           <input name="amount" type="number" step="0.01" min="0" required defaultValue={sub?.amount} placeholder="54.99" className="input-base" />
         </div>
         <div>
           <label className="label-base">Payment Cycle</label>
           <select name="cycle" className="input-base" defaultValue={sub?.cycle || 'monthly'}>
-            <option value="monthly">Monthly</option>
-            <option value="quarterly">Quarterly</option>
-            <option value="annual">Annual</option>
+            <option value="monthly">30 Day Cycle</option>
+            <option value="quarterly">90 Day Cycle</option>
+            <option value="annual">Yearly</option>
           </select>
         </div>
       </div>
@@ -124,7 +124,7 @@ export function AddSubForm({ onClose, initialCardId, sub }: { onClose: () => voi
       </div>
       <div className="pt-4 flex justify-end gap-3">
         <button type="button" onClick={onClose} className="btn-secondary">Cancel</button>
-        <button type="submit" className="btn-primary">{sub ? 'Save Changes' : 'Save Service'}</button>
+        <button type="submit" className="btn-primary">{sub ? 'Save Updates' : 'Save Service'}</button>
       </div>
     </form>
   )
@@ -176,7 +176,7 @@ export function SettingsForm({ onClose }: { onClose: () => void }) {
         </label>
         <label className="flex items-center gap-2">
           <input type="checkbox" name="notifyEmail" defaultChecked={alertsPrefs.notifyEmail} className="rounded border-white/10 text-blue-500 focus:ring-blue-500 bg-[#0E0E12]" />
-          <span className="text-sm">Inbox Message (Mail)</span>
+          <span className="text-sm">Inbox Note (Post)</span>
         </label>
       </div>
       <div className="pt-4 flex justify-end gap-3">
