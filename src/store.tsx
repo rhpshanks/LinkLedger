@@ -45,7 +45,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>(() => loadState('ll_subs', defaultSubscriptions));
   const [alertsPrefs, setAlertsPrefs] = useState<AlertPreference>(() => loadState('ll_alerts', { advanceNoticeDays: 7, notifyInApp: true, notifyEmail: false }));
   const [nodePositions, setNodePositions] = useState<Record<string, { x: number; y: number }>>(() => loadState('ll_node_pos', { 'c1': { x: 50, y: 300 }, 's1': { x: 400, y: 300 } }));
-  const [currency, setCurrency] = useState<string>(() => loadState('ll_currency', 'cash'));
+  const [currency, setCurrency] = useState<string>(() => {
+    const saved = loadState('ll_currency', 'USD');
+    return saved === 'cash' ? 'USD' : saved;
+  });
 
   useEffect(() => { localStorage.setItem('ll_cards', JSON.stringify(cards)); }, [cards]);
   useEffect(() => { localStorage.setItem('ll_subs', JSON.stringify(subscriptions)); }, [subscriptions]);

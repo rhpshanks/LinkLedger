@@ -150,7 +150,7 @@ export function SettingsForm({ onClose }: { onClose: () => void }) {
       <div>
         <label className="label-base">Display Currency</label>
         <select name="currency" className="input-base" defaultValue={currency}>
-          <option value="cash">cash</option>
+
           <option value="USD">USD</option>
 
           <option value="GBP">GBP</option>
