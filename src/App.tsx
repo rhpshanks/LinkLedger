@@ -458,9 +458,9 @@ export default function App() {
               <div className="p-4 rounded-xl bg-blue-600/5 border border-blue-500/20 text-xs leading-relaxed">
                  <div className="font-bold text-blue-400 uppercase mb-2">Instructions</div>
                  {paymentMethod === 'payoneer' ? (
-                   <p>Send **{isYearlyBilling ? 'USD 20' : 'USD 2'}** to Payoneer ID: **your-id@email.com** (Placeholder). Once sent, paste the transaction ID below.</p>
+                   <p>Send <span className="text-white font-bold">{isYearlyBilling ? 'USD 20' : 'USD 2'}</span> to Payoneer ID: <span className="text-white font-bold">your-id@email.com</span> (Placeholder). Once sent, paste the transaction ID below.</p>
                  ) : (
-                   <p>Send **{isYearlyBilling ? 'PKR 560' : 'PKR 60'}** to Sadapay IBAN: **PK00SADA000000000000** (Placeholder). Paste transaction ID below.</p>
+                   <p>Send <span className="text-white font-bold">{isYearlyBilling ? 'PKR 560' : 'PKR 60'}</span> to Phone Wallet (Local Pouch): <span className="text-white font-bold">03009100171</span>. Paste transaction ID below.</p>
                  )}
               </div>
 
