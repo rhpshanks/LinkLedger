@@ -40,3 +40,32 @@
 .label-base {
   @apply block text-[10px] uppercase tracking-widest text-white/40 mb-1;
 }
+
+/* ReactFlow Controls dark theme */
+.react-flow__controls {
+  background: #1E222D;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+.react-flow__controls-button {
+  background: #1E222D;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  fill: #a0a0b0;
+  color: #a0a0b0;
+  width: 28px;
+  height: 28px;
+  padding: 6px;
+}
+
+.react-flow__controls-button:hover {
+  background: #2a2f3e;
+  fill: #ffffff;
+  color: #ffffff;
+}
+
+.react-flow__controls-button:last-child {
+  border-bottom: none;
+}
