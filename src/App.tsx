@@ -168,7 +168,8 @@ export default function App() {
                   {selectedCard.limit && (
                     <div className="mt-4 p-3 rounded-lg bg-white/5 border border-white/10 text-sm text-white/60 flex justify-between items-center">
                       <span className="font-semibold">Planned Budget</span>
-                      {selectedCard.limit.toLocaleString()} MONTHLY {currency}
+                      <span className={`font-bold ${monthlyCardTotal > selectedCard.limit ? 'text-red-400' : 'text-green-400'}`}>
+                        {selectedCard.limit.toLocaleString()} MONTHLY {currency}
                       </span>
                     </div>
                   )}
