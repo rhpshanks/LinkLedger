@@ -126,7 +126,7 @@ export default function App() {
                <option value="all">All Items</option>
                <option value="alert">Needs Attention</option>
                <option value="soon">Renewing Soon (Less than 14 days)</option>
-               <option value="high_cost">High Cost (More than 50 {currency})</option>
+               <option value="high_cost">High Cost (More than {currency} 50)</option>
              </select>
           </div>
           <div className="flex gap-2">
@@ -184,7 +184,7 @@ export default function App() {
                     <div className="mt-4 p-3 rounded-lg bg-white/5 border border-white/10 text-sm text-white/60 flex justify-between items-center">
                       <span className="font-semibold">Planned Budget</span>
                       <span className={`font-bold ${monthlyCardTotal > selectedCard.limit ? 'text-red-400' : 'text-green-400'}`}>
-                        {selectedCard.limit.toLocaleString()} MONTHLY {currency}
+                        {currency} {selectedCard.limit.toLocaleString()} MONTHLY
                       </span>
                     </div>
                   )}
@@ -193,11 +193,11 @@ export default function App() {
                    <div className="grid grid-cols-2 gap-4 mb-8">
                      <div>
                        <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">Monthly Projection</div>
-                       <div className="text-2xl font-light text-[#E0E0E6]">{monthlyCardTotal.toFixed(2)} {currency}</div>
+                       <div className="text-2xl font-light text-[#E0E0E6]">{currency} {monthlyCardTotal.toFixed(2)}</div>
                      </div>
                      <div>
                        <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">Annual Projection</div>
-                       <div className="text-2xl font-light text-[#E0E0E6]">{annualCardTotal.toFixed(2)} {currency}</div>
+                       <div className="text-2xl font-light text-[#E0E0E6]">{currency} {annualCardTotal.toFixed(2)}</div>
                      </div>
                    </div>
                    
@@ -209,7 +209,7 @@ export default function App() {
                            <div className="font-semibold text-sm text-[#E0E0E6]">{s.serviceName}</div>
                            <div className="text-[10px] text-white/40">Renews {format(new Date(s.nextRenewalDate), 'MMM d, yyyy')}</div>
                          </div>
-                         <div className="text-sm font-semibold text-[#E0E0E6] bg-white/5 px-2 py-0.5 rounded shadow-sm border border-white/10">{s.amount} {currency}</div>
+                         <div className="text-sm font-semibold text-[#E0E0E6] bg-white/5 px-2 py-0.5 rounded shadow-sm border border-white/10">{currency} {s.amount}</div>
                        </div>
                      ))}
                    </div>
@@ -243,7 +243,7 @@ export default function App() {
                    <div className="flex items-center gap-4 py-4 border-y border-white/10">
                       <div className="flex-1">
                          <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">Planned Fee</div>
-                         <div className="text-xl font-mono tracking-tight text-[#E0E0E6]">{selectedSub.amount} {currency}</div>
+                         <div className="text-xl font-mono tracking-tight text-[#E0E0E6]">{currency} {selectedSub.amount}</div>
                       </div>
                       <div className="flex-1 border-l border-white/10 pl-4">
                          <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">Payment Cycle</div>
@@ -328,7 +328,7 @@ export default function App() {
                    <div className="font-semibold text-[#E0E0E6]">{s.serviceName}</div>
                    <div className="text-sm">
                      {s.days < 0 ? <span className="text-red-400 font-bold">Past due by {Math.abs(s.days)} days</span> : <span className="text-amber-400 font-bold">Renews in {s.days} days</span>}
-                     <span className="text-white/40 ml-2">({s.amount} {currency})</span>
+                     <span className="text-white/40 ml-2">({currency} {s.amount})</span>
                    </div>
                  </div>
                  <button className="btn-secondary text-xs py-1 px-3" onClick={() => { setIsAlertsOpen(false); setSelectedSubId(s.id); }}>Review</button>

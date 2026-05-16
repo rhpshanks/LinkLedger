@@ -31,7 +31,7 @@ export function SubscriptionNode({ data }: { data: Subscription & { onClick: () 
       <div className="flex justify-between items-start mb-2 pr-4">
         <div className="font-medium text-xs truncate max-w-[130px] text-[#E0E0E6]">{data.serviceName}</div>
         <div className="text-[10px] font-semibold whitespace-nowrap bg-white/5 border border-white/10 px-1.5 py-0.5 rounded text-[#E0E0E6]">
-          {data.amount.toLocaleString()} <span className="text-[8px] text-white/40 font-normal uppercase">{data.cycle === 'monthly' ? 'MONTHLY' : data.cycle === 'annual' ? 'ANNUAL' : 'QUARTERLY'} {currency}</span>
+          <span className="text-[8px] text-white/40 font-normal uppercase">{currency} {data.cycle === 'monthly' ? 'MONTHLY' : data.cycle === 'annual' ? 'ANNUAL' : 'QUARTERLY'}</span> {data.amount.toLocaleString()}
         </div>
       </div>
       
