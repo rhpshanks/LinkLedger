@@ -662,7 +662,7 @@ export default function App() {
                   <div className="text-3xl font-black text-[#E0E0E6] mb-1">
                      {isYearlyBilling ? 'USD 20' : 'USD 2'}
                   </div>
-                  <div className="text-[10px] font-bold text-white/30 uppercase ls-wide mb-6">{isYearlyBilling ? '/ YEARLY' : '/ MONTHLY'}</div>
+                  <div className="text-[10px] font-bold text-white/30 uppercase ls-wide mb-6">{isYearlyBilling ? 'BILLED YEARLY' : 'BILLED MONTHLY'}</div>
                   <ul className="space-y-3 mb-8 flex-1">
                     {['Unlimited Sources', 'Unlimited Services', 'Data Audits', 'Logic Hints'].map(item => (
                        <li key={item} className="text-xs text-white/60 flex items-center gap-2">
@@ -680,7 +680,7 @@ export default function App() {
                   <div className="text-3xl font-black text-[#E0E0E6] mb-1">
                      {isYearlyBilling ? 'USD 100' : 'USD 10'}
                   </div>
-                  <div className="text-[10px] font-bold text-white/30 uppercase ls-wide mb-6">{isYearlyBilling ? '/ YEARLY' : '/ MONTHLY'}</div>
+                  <div className="text-[10px] font-bold text-white/30 uppercase ls-wide mb-6">{isYearlyBilling ? 'BILLED YEARLY' : 'BILLED MONTHLY'}</div>
                   <ul className="space-y-3 mb-8 flex-1">
                     {['Senior Logic Advisor', 'Global Currency Scan', 'Audit Grade Blueprints', 'Collab Workspace'].map(item => (
                        <li key={item} className="text-xs text-[#E0E0E6] font-bold flex items-center gap-2">
@@ -728,14 +728,14 @@ export default function App() {
               <div className="p-4 rounded-xl bg-blue-600/5 border border-blue-500/20 text-xs leading-relaxed">
                  <div className="font-bold text-blue-400 uppercase mb-2">Instructions</div>
                  {paymentMethod === 'payoneer' ? (
-                   <p>Send <span className="text-white font-bold">USD {planChoice === 'pro' ? (isYearlyBilling ? '20' : '2') : (isYearlyBilling ? '100' : '10')}</span> to Payoneer ID: <span className="text-white font-bold">your-id@email.com</span>. Paste payment ID below.</p>
+                   <p>Send <span className="text-white font-bold">USD {planChoice === 'pro' ? (isYearlyBilling ? '20' : '2') : (isYearlyBilling ? '100' : '10')}</span> to Payoneer ID: <span className="text-white font-bold">PROVIDED ID</span>. Paste payment ID below.</p>
                  ) : (
                    <p>Send <span className="text-white font-bold">PKR {planChoice === 'pro' ? (isYearlyBilling ? '560' : '60') : (isYearlyBilling ? '2800' : '280')}</span> to Wallet: <span className="text-white font-bold">03009100171</span>. Paste payment ID below.</p>
                  )}
               </div>
 
               <div>
-                 <label className="label-base">Payment ID / Reference</label>
+                 <label className="label-base">Payment ID OR Reference</label>
                  <input className="input-base" placeholder="Enter ID here" />
               </div>
 
