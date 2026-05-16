@@ -108,7 +108,7 @@ export function AddSubForm({ onClose, initialCardId, sub }: { onClose: () => voi
           <input name="amount" type="number" step="0.01" min="0" required defaultValue={sub?.amount} placeholder="54.99" className="input-base" />
         </div>
         <div>
-          <label className="label-base">Payment Cycle</label>
+          <label className="label-base">Billing Cycle</label>
           <select name="cycle" className="input-base" defaultValue={sub?.cycle || 'monthly'}>
             <option value="monthly">Monthly</option>
             <option value="quarterly">90 Day Cycle</option>

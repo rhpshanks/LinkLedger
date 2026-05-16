@@ -62,9 +62,9 @@ export default function App() {
   const [isEditSubOpen, setIsEditSubOpen] = useState(!1);
   const [isPlansOpen, setIsPlansOpen] = useState(!1);
   const [isYearlyBilling, setIsYearlyBilling] = useState(!1);
-  const [plansPhase, setPlansPhase] = useState<'pick' | 'pay' | 'verify'>('pick');
+  const [plansPhase, setPlansPhase] = useState<'pick' | 'unlock'>('pick');
   const [planChoice, setPlanChoice] = useState<'pro' | 'pro_plus'>('pro');
-  const [paymentMethod, setPaymentMethod] = useState<'payoneer' | 'bank' | null>(null);
+  const [unlockCode, setUnlockCode] = useState('');
   const [filterType, setFilterType] = useState<'all' | 'alert' | 'soon' | 'high_cost'>('all');
 
   useEffect(() => {
@@ -228,7 +228,7 @@ export default function App() {
                     <div className="text-[7px] bg-white/10 text-white/40 px-1 py-0.5 rounded uppercase font-black ls-tighter">AD</div>
                   </div>
                   <div className="font-bold text-xs text-[#E0E0E6] mb-1">Sapphire Bonus Card</div>
-                  <p className="text-[10px] text-white/30 leading-tight mb-3">Gain 3% back on all services pathing here.</p>
+                  <p className="text-[10px] text-white/30 leading-tight mb-3">Gain 3% back on all services routing here.</p>
                   <button className="w-full py-1.5 bg-blue-600/20 text-blue-400 text-[9px] font-black uppercase ls-wide rounded-lg border border-blue-500/30 hover:bg-blue-600 hover:text-white shift-anim">Check Now</button>
                 </div>
                 <div className="mt-2 text-center">
@@ -287,7 +287,7 @@ export default function App() {
         </div>
       </main>
 
-      {/* Details Panel - Slides in when a node is selected */}
+      {/* Details Window - Slides in when a node is selected */}
       {(selectedCardId || selectedSubId) && (
         <aside className="w-80 border-l border-white/10 absolute right-0 inset-y-0 shadow-2xl z-20 flex flex-col animate-in slide-in-from-right-8 duration-300"
           style={{ background: 'rgba(14,14,18,0.85)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}
@@ -347,7 +347,7 @@ export default function App() {
                          <div className="font-bold text-sm text-[#E0E0E6]">Sapphire High-Value Card</div>
                          <div className="text-[10px] bg-blue-600 text-white px-1.5 py-0.5 rounded font-black">AD</div>
                        </div>
-                       <p className="text-[10px] text-white/50 mb-3">Earn 5% cashback on regular costs pathing here.</p>
+                       <p className="text-[10px] text-white/50 mb-3">Earn 5% cashback on regular costs routing here.</p>
                        <button className="w-full py-2 bg-blue-600 rounded-lg text-[10px] font-bold text-white uppercase ls-wide shadow-lg shadow-blue-600/20">Check Approval</button>
                      </div>
                    </div>
@@ -402,7 +402,7 @@ export default function App() {
                          <div className="text-xl font-mono ls-tight text-[#E0E0E6]">{currency} {selectedSub.amount}</div>
                       </div>
                       <div className="flex-1 border-l border-white/10 pl-4">
-                         <div className="text-[10px] uppercase ls-wide text-white/40 font-bold mb-1">Payment Cycle</div>
+                         <div className="text-[10px] uppercase ls-wide text-white/40 font-bold mb-1">Billing Cycle</div>
                          <div className="text-sm font-medium capitalize text-[#E0E0E6]">{selectedSub.cycle}</div>
                       </div>
                    </div>
@@ -487,7 +487,7 @@ export default function App() {
                  <div>
                    <div className="font-semibold text-[#E0E0E6]">{s.serviceName}</div>
                    <div className="text-sm">
-                     {s.days < 0 ? <span className="text-red-400 font-bold">Past due by {Math.abs(s.days)} days</span> : <span className="text-amber-400 font-bold">Cycles in {s.days} days</span>}
+                     {s.days < 0 ? <span className="text-red-400 font-bold">Late by {Math.abs(s.days)} days</span> : <span className="text-amber-400 font-bold">Cycles in {s.days} days</span>}
                      <span className="text-white/40 ml-2">({currency} {s.amount})</span>
                    </div>
                  </div>
@@ -635,7 +635,7 @@ export default function App() {
          </div>
       </Modal>
 
-      <Modal isOpen={isPlansOpen} onClose={() => { setIsPlansOpen(!1); setPlansPhase('pick'); }} title={plansPhase === 'pick' ? 'SELECT your PLAN' : plansPhase === 'pay' ? 'Payment Choice' : 'SUBMIT Payment'}>
+      <Modal isOpen={isPlansOpen} onClose={() => { setIsPlansOpen(!1); setPlansPhase('pick'); }} title={plansPhase === 'pick' ? 'SELECT your PLAN' : 'Patreon Unlock'}>
          {plansPhase === 'pick' && (
            <>
             <div className="flex justify-center mb-8">
@@ -670,7 +670,7 @@ export default function App() {
                        </li>
                     ))}
                   </ul>
-                  <button onClick={() => { setPlanChoice('pro'); setPlansPhase('pay'); }} className="w-full py-3 rounded-xl bg-white/10 text-white font-bold text-xs uppercase ls-wide group-hover:bg-blue-600 shift-anim">Select PRO</button>
+                  <button onClick={() => { setPlanChoice('pro'); setPlansPhase('unlock'); }} className="w-full py-3 rounded-xl bg-white/10 text-white font-bold text-xs uppercase ls-wide group-hover:bg-blue-600 shift-anim">Select PRO</button>
                </div>
 
                {/* Pro Plus Tier */}
@@ -688,64 +688,39 @@ export default function App() {
                        </li>
                     ))}
                   </ul>
-                  <button onClick={() => { setPlanChoice('pro_plus'); setPlansPhase('pay'); }} className="w-full py-3 rounded-xl bg-blue-600 text-white text-xs font-bold uppercase ls-wide hover:bg-blue-500 shift-anim shadow-lg shadow-blue-600/40">Select PRO PLUS</button>
+                  <button onClick={() => { setPlanChoice('pro_plus'); setPlansPhase('unlock'); }} className="w-full py-3 rounded-xl bg-blue-600 text-white text-xs font-bold uppercase ls-wide hover:bg-blue-500 shift-anim shadow-lg shadow-blue-600/40">Select PRO PLUS</button>
                </div>
             </div>
            </>
          )}
 
-         {plansPhase === 'pay' && (
-           <div className="space-y-4 p-2">
-              <div className="text-xs text-white/50 mb-6">Choose how you want to send the value:</div>
-              <button 
-                onClick={() => { setPaymentMethod('payoneer'); setPlansPhase('verify'); }}
-                className="w-full p-4 rounded-xl border border-white/10 bg-white/5 hover:border-blue-500/50 shift-anim flex items-center justify-between group"
-              >
-                <div className="text-left">
-                   <div className="font-bold text-[#E0E0E6]">Payoneer</div>
-                   <div className="text-[10px] text-white/40">Best for International handovers</div>
-                </div>
-                <div className="text-[10px] font-bold text-blue-400 opacity-0 group-hover:opacity-100 shift-anim">PICK</div>
-              </button>
-
-              <button 
-                onClick={() => { setPaymentMethod('bank'); setPlansPhase('verify'); }}
-                className="w-full p-4 rounded-xl border border-white/10 bg-white/5 hover:border-blue-500/50 shift-anim flex items-center justify-between group"
-              >
-                <div className="text-left">
-                   <div className="font-bold text-[#E0E0E6]">Pakistan Local handover</div>
-                   <div className="text-[10px] text-white/40">Local Pouch or Bank IBAN</div>
-                </div>
-                <div className="text-[10px] font-bold text-blue-400 opacity-0 group-hover:opacity-100 shift-anim">PICK</div>
-              </button>
-
-              <button onClick={() => setPlansPhase('pick')} className="w-full py-3 text-xs font-bold text-white/30 uppercase ls-wide hover:text-white shift-anim">Go Back</button>
-           </div>
-         )}
-
-         {plansPhase === 'verify' && (
+         {plansPhase === 'unlock' && (
            <div className="space-y-6 p-2">
-              <div className="p-4 rounded-xl bg-blue-600/5 border border-blue-500/20 text-xs leading-relaxed">
-                 <div className="font-bold text-blue-400 uppercase mb-2">Instructions</div>
-                 {paymentMethod === 'payoneer' ? (
-                   <p>Send <span className="text-white font-bold">USD {planChoice === 'pro' ? (isYearlyBilling ? '20' : '2') : (isYearlyBilling ? '100' : '10')}</span> to Payoneer ID: <span className="text-white font-bold">PROVIDED ID</span>. Paste payment ID below.</p>
-                 ) : (
-                   <p>Send <span className="text-white font-bold">PKR {planChoice === 'pro' ? (isYearlyBilling ? '560' : '60') : (isYearlyBilling ? '2800' : '280')}</span> to Wallet: <span className="text-white font-bold">03009100171</span>. Paste payment ID below.</p>
-                 )}
+              <div className="p-4 rounded-xl bg-blue-600/5 border border-blue-500/20 text-xs text-center">
+                 <div className="font-bold text-blue-400 uppercase mb-4">Support on Patreon</div>
+                 <a href="https://patreon.com" target="_blank" rel="noopener noreferrer" className="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-500 shift-anim mb-2">Visit Patreon</a>
+                 <p className="text-white/50 text-[10px]">Once joined, you will get a Secret Code to unlock Pro logic.</p>
               </div>
-
               <div>
-                 <label className="label-base">Payment ID OR Reference</label>
-                 <input className="input-base" placeholder="Enter ID here" />
+                 <label className="label-base">Insert Secret Code</label>
+                 <input value={unlockCode} onChange={e => setUnlockCode(e.target.value)} className="input-base" placeholder="CODE-PRO" />
               </div>
-
               <div className="flex gap-3">
-                 <button onClick={() => setPlansPhase('pay')} className="flex-1 py-3 rounded-xl bg-white/5 text-white/60 text-xs font-bold uppercase ls-wide hover:bg-white/10 shift-anim">Back</button>
+                 <button onClick={() => setPlansPhase('pick')} className="flex-1 py-3 rounded-xl bg-white/5 text-white/60 text-xs font-bold uppercase ls-wide hover:bg-white/10 shift-anim">Go Back</button>
                  <button 
-                  onClick={() => { alert('Payment submitted for audit!'); setIsPlansOpen(!1); setPlansPhase('pick'); }}
+                  onClick={() => { 
+                    if (unlockCode === 'CODE-PRO' || unlockCode === 'CODE-PLUS') {
+                      setIsPremium(!0);
+                      alert('Code Validated! Pro Unlocked.');
+                      setIsPlansOpen(!1);
+                      setPlansPhase('pick');
+                    } else {
+                      alert('Invalid Code. Check again.');
+                    }
+                  }}
                   className="flex-2 py-3 rounded-xl bg-blue-600 text-white text-xs font-bold uppercase ls-wide hover:bg-blue-500 shift-anim shadow-lg shadow-blue-600/20"
                  >
-                   Submit for Audit
+                   Verify Secret
                  </button>
               </div>
            </div>

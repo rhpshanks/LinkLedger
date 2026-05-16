@@ -54,7 +54,7 @@ export function SubscriptionNode({ data }: { data: Subscription & { onClick: () 
         {data.isPastDue ? <AlertCircle size={10} /> : <Clock size={10} />}
         <span>
           {data.isPastDue 
-            ? `Past due by ${Math.abs(daysUntil)}d` 
+            ? `Late by ${Math.abs(daysUntil)}d` 
             : `Cycles in ${daysUntil}d`}
         </span>
       </div>
