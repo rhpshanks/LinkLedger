@@ -232,7 +232,7 @@ export default function App() {
                   <button className="w-full py-1.5 bg-blue-600/20 text-blue-400 text-[9px] font-black uppercase ls-wide rounded-lg border border-blue-500/30 hover:bg-blue-600 hover:text-white shift-anim">Check Now</button>
                 </div>
                 <div className="mt-2 text-center">
-                  <button onClick={() => setIsPlansOpen(!!1)} className="text-[7px] font-bold text-white/20 hover:text-white/40 shift-anim uppercase ls-wide underline decoration-white/10">Shed Ads with Pro Plus</button>
+                  <button onClick={() => setIsPlansOpen(!!1)} className="text-[7px] font-bold text-white/20 hover:text-white/40 shift-anim uppercase ls-wide underline decoration-white/10">Hide Ads with Pro Plus</button>
                 </div>
               </div>
             )}
