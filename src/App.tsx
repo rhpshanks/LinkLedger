@@ -63,6 +63,7 @@ export default function App() {
   const [isPlansOpen, setIsPlansOpen] = useState(false);
   const [isYearlyBilling, setIsYearlyBilling] = useState(false);
   const [plansPhase, setPlansPhase] = useState<'pick' | 'pay' | 'verify'>('pick');
+  const [planChoice, setPlanChoice] = useState<'pro' | 'pro_plus'>('pro');
   const [paymentMethod, setPaymentMethod] = useState<'payoneer' | 'bank' | null>(null);
   const [filterType, setFilterType] = useState<'all' | 'alert' | 'soon' | 'high_cost'>('all');
 
@@ -628,42 +629,39 @@ export default function App() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-2">
-               {/* No Cost Tier */}
-               <div className="p-6 rounded-2xl bg-white/5 border border-white/10 flex flex-col h-full">
-                  <div className="text-sm font-bold text-white/40 uppercase tracking-widest mb-2">Basic</div>
-                  <div className="text-3xl font-black text-[#E0E0E6] mb-4">No Cost</div>
-                  <ul className="space-y-3 mb-8 flex-1">
-                    <li className="text-xs text-white/70 flex items-center gap-2">3 Cash Sources</li>
-                    <li className="text-xs text-white/70 flex items-center gap-2">10 Regular Services</li>
-                    <li className="text-xs text-white/30 flex items-center gap-2 pt-3">Sync on Devices</li>
-                  </ul>
-                  <button className="w-full py-3 rounded-xl bg-white/10 text-white/60 text-xs font-bold uppercase tracking-widest cursor-default">Current Choice</button>
-               </div>
-
                {/* Pro Tier */}
-               <div className="p-6 rounded-2xl bg-blue-600/10 border-2 border-blue-500/50 flex flex-col h-full relative overflow-hidden shadow-2xl shadow-blue-600/20">
-                  <div className="absolute top-0 right-0 bg-blue-500 text-white text-[8px] font-black px-3 py-1 rounded-bl-lg">TOP VALUE</div>
-                  <div className="text-sm font-bold text-blue-400 uppercase tracking-widest mb-2">PRO</div>
+               <div className="p-6 rounded-2xl bg-white/5 border border-white/10 flex flex-col h-full hover:border-blue-500/50 transition-all group">
+                  <div className="text-sm font-bold text-white/40 uppercase tracking-widest mb-2">PRO</div>
                   <div className="text-3xl font-black text-[#E0E0E6] mb-1">
                      {isYearlyBilling ? 'USD 20' : 'USD 2'}
-                     <span className="text-[10px] font-bold text-white/40 ml-2 uppercase tracking-widest">
-                        {isYearlyBilling ? 'YEARLY' : 'MONTHLY'}
-                     </span>
                   </div>
-                  {isYearlyBilling && (
-                    <div className="text-[10px] font-bold text-green-400 mb-4 uppercase tracking-tighter">
-                      SAVE 4 USD YEARLY
-                    </div>
-                  )}
-                  {!isYearlyBilling && <div className="h-4 mb-4" />}
+                  <div className="text-[10px] font-bold text-white/30 uppercase tracking-widest mb-6">{isYearlyBilling ? '/ YEARLY' : '/ MONTHLY'}</div>
                   <ul className="space-y-3 mb-8 flex-1">
-                    <li className="text-xs text-white/90 flex items-center gap-2">Unlimited Sources</li>
-                    <li className="text-xs text-white/90 flex items-center gap-2">Unlimited Services</li>
-                    <li className="text-xs text-white/90 flex items-center gap-2">Sync on Devices</li>
-                    <li className="text-xs text-white/90 flex items-center gap-2">Data Reports</li>
-                    <li className="text-xs text-white/90 flex items-center gap-2">Custom Themes</li>
+                    {['Unlimited Sources', 'Unlimited Services', 'Data Reports', 'Ghosting Anims'].map(item => (
+                       <li key={item} className="text-xs text-white/60 flex items-center gap-2">
+                          <div className="w-1 h-1 rounded-full bg-blue-500" /> {item}
+                       </li>
+                    ))}
                   </ul>
-                  <button onClick={() => setPlansPhase('pay')} className="w-full py-3 rounded-xl bg-blue-600 text-white text-xs font-bold uppercase tracking-widest hover:bg-blue-500 transition-all shadow-lg shadow-blue-600/40">Select PRO</button>
+                  <button onClick={() => { setPlanChoice('pro'); setPlansPhase('pay'); }} className="w-full py-3 rounded-xl bg-white/10 text-white font-bold text-xs uppercase tracking-widest group-hover:bg-blue-600 transition-all">Select PRO</button>
+               </div>
+
+               {/* Pro Plus Tier */}
+               <div className="p-6 rounded-2xl bg-blue-600/10 border-2 border-blue-500/50 flex flex-col h-full relative overflow-hidden shadow-2xl shadow-blue-600/20 group hover:scale-[1.02] transition-all">
+                  <div className="absolute top-0 right-0 bg-blue-500 text-white text-[8px] font-black px-3 py-1 rounded-bl-lg">TOP VALUE</div>
+                  <div className="text-sm font-bold text-blue-400 uppercase tracking-widest mb-2">PRO PLUS</div>
+                  <div className="text-3xl font-black text-[#E0E0E6] mb-1">
+                     {isYearlyBilling ? 'USD 100' : 'USD 10'}
+                  </div>
+                  <div className="text-[10px] font-bold text-white/30 uppercase tracking-widest mb-6">{isYearlyBilling ? '/ YEARLY' : '/ MONTHLY'}</div>
+                  <ul className="space-y-3 mb-8 flex-1">
+                    {['Senior Logic Advisor', 'Global Currency Scan', 'Audit Grade Visuals', 'Collab Workspace'].map(item => (
+                       <li key={item} className="text-xs text-[#E0E0E6] font-bold flex items-center gap-2">
+                          <div className="w-1 h-1 rounded-full bg-blue-400" /> {item}
+                       </li>
+                    ))}
+                  </ul>
+                  <button onClick={() => { setPlanChoice('pro_plus'); setPlansPhase('pay'); }} className="w-full py-3 rounded-xl bg-blue-600 text-white text-xs font-bold uppercase tracking-widest hover:bg-blue-500 transition-all shadow-lg shadow-blue-600/40">Select PRO PLUS</button>
                </div>
             </div>
            </>
@@ -703,9 +701,9 @@ export default function App() {
               <div className="p-4 rounded-xl bg-blue-600/5 border border-blue-500/20 text-xs leading-relaxed">
                  <div className="font-bold text-blue-400 uppercase mb-2">Instructions</div>
                  {paymentMethod === 'payoneer' ? (
-                   <p>Send <span className="text-white font-bold">{isYearlyBilling ? 'USD 20' : 'USD 2'}</span> to Payoneer ID: <span className="text-white font-bold">your-id@email.com</span> (Placeholder). Once sent, paste the transaction ID below.</p>
+                   <p>Send <span className="text-white font-bold">USD {planChoice === 'pro' ? (isYearlyBilling ? '20' : '2') : (isYearlyBilling ? '100' : '10')}</span> to Payoneer ID: <span className="text-white font-bold">your-id@email.com</span>. Paste transaction ID below.</p>
                  ) : (
-                   <p>Send <span className="text-white font-bold">{isYearlyBilling ? 'PKR 560' : 'PKR 60'}</span> to Phone Wallet (Local Pouch): <span className="text-white font-bold">03009100171</span>. Paste transaction ID below.</p>
+                   <p>Send <span className="text-white font-bold">PKR {planChoice === 'pro' ? (isYearlyBilling ? '560' : '60') : (isYearlyBilling ? '2800' : '280')}</span> to Wallet: <span className="text-white font-bold">03009100171</span>. Paste transaction ID below.</p>
                  )}
               </div>
 
