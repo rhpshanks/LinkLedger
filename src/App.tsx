@@ -10,9 +10,10 @@ import { Plus, CreditCard, LayoutDashboard, Settings as SettingsIcon, Bell } fro
 import { Modal } from './components/Modal';
 import { AddCardForm, AddSubForm, SettingsForm } from './components/forms';
 import { differenceInDays, format } from 'date-fns';
+import { useEffect } from 'react';
 
 export default function App() {
-  const { cards, subscriptions, removeCard, removeSubscription, updateNodesPositions } = useAppStore();
+  const { cards, subscriptions, removeCard, removeSubscription, updateNodesPositions, currency } = useAppStore();
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
   const [selectedSubId, setSelectedSubId] = useState<string | null>(null);
   const [isAddCardOpen, setIsAddCardOpen] = useState(false);
@@ -22,6 +23,17 @@ export default function App() {
   const [isEditSubOpen, setIsEditSubOpen] = useState(false);
   
   const [filterType, setFilterType] = useState<'all' | 'alert' | 'soon' | 'high_cost'>('all');
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.key.toLowerCase() === 'n') {
+        e.preventDefault();
+        setIsAddCardOpen(true);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const selectedCard = cards.find(c => c.id === selectedCardId);
   const selectedSub = subscriptions.find(s => s.id === selectedSubId);
@@ -77,14 +89,14 @@ export default function App() {
             className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-white/60 rounded-lg hover:text-white transition-colors"
           >
             <CreditCard size={18} className="shrink-0" />
-            <span className="hidden md:block">Add Card</span>
+            <span className="hidden md:block">Add Funding Source</span>
           </button>
           <button 
             onClick={() => setIsAddSubOpen(true)}
             className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-white/60 rounded-lg hover:text-white transition-colors"
           >
             <Plus size={18} className="shrink-0" />
-            <span className="hidden md:block">Add Subscription</span>
+            <span className="hidden md:block">Add Recurring Service</span>
           </button>
         </nav>
 
@@ -111,8 +123,8 @@ export default function App() {
              >
                <option value="all">All Items</option>
                <option value="alert">Needs Attention</option>
-               <option value="soon">Renewing Soon (≤14 days)</option>
-               <option value="high_cost">High Cost (&gt;$50)</option>
+               <option value="soon">Renewing Soon (under 14 days)</option>
+               <option value="high_cost">High Cost (over 50 {currency})</option>
              </select>
           </div>
           <div className="flex gap-2">
@@ -142,22 +154,21 @@ export default function App() {
              <div className="flex flex-col h-full">
                 <div className="p-6 border-b border-white/10">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-xl font-black font-serif tracking-tight text-[#E0E0E6]">Card Summary</h2>
-                    <button onClick={() => setSelectedCardId(null)} className="text-white/40 hover:text-white p-1">×</button>
+                    <h2 className="text-xl font-black font-serif tracking-tight text-[#E0E0E6]">Funding Source Summary</h2>
+                    <button onClick={() => setSelectedCardId(null)} className="text-white/40 hover:text-white p-1 text-xs uppercase font-bold tracking-wider">Hide</button>
                   </div>
                   <div className="p-4 rounded-xl text-white shadow-md mb-2 relative overflow-hidden" style={{ backgroundColor: selectedCard.color || '#1a1a1a' }}>
                     <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_100%_0%,_white_0%,_transparent_50%)]"></div>
                     <div className="font-semibold text-lg drop-shadow-sm">{selectedCard.label}</div>
                     <div className="text-white/80 text-sm mt-1 mb-4 flex justify-between">
                       <span>{selectedCard.type}</span>
-                      <span className="font-mono tracking-widest text-shadow-sm">•••• {selectedCard.last4}</span>
+                      <span className="font-mono tracking-widest text-shadow-sm">ending in {selectedCard.last4}</span>
                     </div>
                   </div>
                   {selectedCard.limit && (
                     <div className="mt-4 p-3 rounded-lg bg-white/5 border border-white/10 text-sm text-white/60 flex justify-between items-center">
-                      <span className="font-semibold">Spend Limit</span>
-                      <span className={`font-bold ${monthlyCardTotal > selectedCard.limit ? 'text-red-400' : 'text-green-400'}`}>
-                        ${selectedCard.limit.toLocaleString()}/mo
+                      <span className="font-semibold">Planned Budget</span>
+                      {selectedCard.limit.toLocaleString()} MONTHLY {currency}
                       </span>
                     </div>
                   )}
@@ -165,16 +176,16 @@ export default function App() {
                 <div className="p-6 flex-1 overflow-y-auto">
                    <div className="grid grid-cols-2 gap-4 mb-8">
                      <div>
-                       <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">Monthly Cost</div>
-                       <div className="text-2xl font-light text-[#E0E0E6]">${monthlyCardTotal.toFixed(2)}</div>
+                       <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">Monthly Estimate</div>
+                       <div className="text-2xl font-light text-[#E0E0E6]">{monthlyCardTotal.toFixed(2)} {currency}</div>
                      </div>
                      <div>
-                       <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">Annual Cost</div>
-                       <div className="text-2xl font-light text-[#E0E0E6]">${annualCardTotal.toFixed(2)}</div>
+                       <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">Annual Estimate</div>
+                       <div className="text-2xl font-light text-[#E0E0E6]">{annualCardTotal.toFixed(2)} {currency}</div>
                      </div>
                    </div>
                    
-                   <h3 className="text-xs uppercase tracking-wider text-white/40 font-bold mb-3">Linked Subscriptions ({cardSubs.length})</h3>
+                   <h3 className="text-xs uppercase tracking-wider text-white/40 font-bold mb-3">Linked Services ({cardSubs.length})</h3>
                    <div className="space-y-3">
                      {cardSubs.map(s => (
                        <div key={s.id} className="flex justify-between items-center p-3 rounded-lg border border-white/10 bg-[#15171E] cursor-pointer hover:border-blue-500/50 transition-colors" onClick={() => { setSelectedCardId(null); setSelectedSubId(s.id); }}>
@@ -182,7 +193,7 @@ export default function App() {
                            <div className="font-semibold text-sm text-[#E0E0E6]">{s.serviceName}</div>
                            <div className="text-[10px] text-white/40">Renews {format(new Date(s.nextRenewalDate), 'MMM d, yyyy')}</div>
                          </div>
-                         <div className="text-sm font-semibold text-[#E0E0E6] bg-white/5 px-2 py-0.5 rounded shadow-sm border border-white/10">${s.amount}</div>
+                         <div className="text-sm font-semibold text-[#E0E0E6] bg-white/5 px-2 py-0.5 rounded shadow-sm border border-white/10">{s.amount} {currency}</div>
                        </div>
                      ))}
                    </div>
@@ -192,7 +203,7 @@ export default function App() {
                       onClick={() => { removeCard(selectedCard.id); setSelectedCardId(null); }}
                       className="w-full btn-danger text-sm"
                     >
-                      Remove Card
+                      Remove Source
                     </button>
                     <p className="text-[10px] text-white/40 text-center mt-2">Unlinks all subscriptions</p>
                 </div>
@@ -203,23 +214,23 @@ export default function App() {
              <div className="flex flex-col h-full">
                 <div className="p-6 border-b border-white/10">
                   <div className="flex items-center justify-between mb-2">
-                    <h2 className="text-xl font-black font-serif tracking-tight text-[#E0E0E6]">Subscription Detail</h2>
-                    <button onClick={() => setSelectedSubId(null)} className="text-white/40 hover:text-white p-1">×</button>
+                    <h2 className="text-xl font-black font-serif tracking-tight text-[#E0E0E6]">Service Detail</h2>
+                    <button onClick={() => setSelectedSubId(null)} className="text-white/40 hover:text-white p-1 text-xs uppercase font-bold tracking-wider">Hide</button>
                   </div>
                 </div>
                 <div className="p-6 flex-1 overflow-y-auto space-y-6">
                    <div>
                       <div className="text-2xl font-semibold text-[#E0E0E6] mb-1">{selectedSub.serviceName}</div>
-                      {selectedSub.url && <a href={selectedSub.url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-400 hover:underline flex items-center gap-1">{selectedSub.url} ♥</a>}
+                      {selectedSub.url && <a href={selectedSub.url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-400 hover:underline flex items-center gap-1">{selectedSub.url} link</a>}
                    </div>
 
                    <div className="flex items-center gap-4 py-4 border-y border-white/10">
                       <div className="flex-1">
-                         <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">Billing Amount</div>
-                         <div className="text-xl font-mono tracking-tight text-[#E0E0E6]">${selectedSub.amount}</div>
+                         <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">Estimated Fee</div>
+                         <div className="text-xl font-mono tracking-tight text-[#E0E0E6]">{selectedSub.amount} {currency}</div>
                       </div>
                       <div className="flex-1 border-l border-white/10 pl-4">
-                         <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">Billing Cycle</div>
+                         <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">Payment Cycle</div>
                          <div className="text-sm font-medium capitalize text-[#E0E0E6]">{selectedSub.cycle}</div>
                       </div>
                    </div>
@@ -240,7 +251,7 @@ export default function App() {
 
                    {selectedSub.cardId && (
                      <div>
-                        <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-2">Payment Source</div>
+                        <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-2">Funding Source</div>
                         {cards.find(c => c.id === selectedSub.cardId) ? (
                           <div 
                             className="flex items-center gap-3 p-3 bg-[#15171E] border border-white/10 rounded-lg cursor-pointer hover:border-blue-500/50 transition-colors shadow-sm"
@@ -249,11 +260,11 @@ export default function App() {
                             <CreditCard size={18} className="text-white/40" />
                             <div>
                                <div className="text-sm font-medium text-[#E0E0E6]">{cards.find(c => c.id === selectedSub.cardId)?.label}</div>
-                               <div className="text-xs text-white/40 font-mono">•••• {cards.find(c => c.id === selectedSub.cardId)?.last4}</div>
+                               <div className="text-xs text-white/40 font-mono">ending in {cards.find(c => c.id === selectedSub.cardId)?.last4}</div>
                             </div>
                           </div>
                         ) : (
-                          <div className="text-xs text-red-500">Card not found.</div>
+                          <div className="text-xs text-red-500">Source not found.</div>
                         )}
                      </div>
                    )}
@@ -273,15 +284,15 @@ export default function App() {
       )}
 
       {/* Modals */}
-      <Modal isOpen={isAddCardOpen} onClose={() => setIsAddCardOpen(false)} title="Add Payment Card">
+      <Modal isOpen={isAddCardOpen} onClose={() => setIsAddCardOpen(false)} title="Add Funding Source">
          <AddCardForm onClose={() => setIsAddCardOpen(false)} />
       </Modal>
 
-      <Modal isOpen={isAddSubOpen} onClose={() => setIsAddSubOpen(false)} title="Add Subscription">
+      <Modal isOpen={isAddSubOpen} onClose={() => setIsAddSubOpen(false)} title="Add Recurring Service">
          <AddSubForm onClose={() => setIsAddSubOpen(false)} initialCardId={selectedCardId || undefined} />
       </Modal>
 
-      <Modal isOpen={isEditSubOpen && !!selectedSub} onClose={() => setIsEditSubOpen(false)} title="Edit Subscription">
+      <Modal isOpen={isEditSubOpen && !!selectedSub} onClose={() => setIsEditSubOpen(false)} title="Edit Service">
          <AddSubForm onClose={() => setIsEditSubOpen(false)} sub={selectedSub} />
       </Modal>
 
@@ -301,7 +312,7 @@ export default function App() {
                    <div className="font-semibold text-[#E0E0E6]">{s.serviceName}</div>
                    <div className="text-sm">
                      {s.days < 0 ? <span className="text-red-400 font-bold">Past due by {Math.abs(s.days)} days</span> : <span className="text-amber-400 font-bold">Renews in {s.days} days</span>}
-                     <span className="text-white/40 ml-2">(${s.amount})</span>
+                     <span className="text-white/40 ml-2">({s.amount} {currency})</span>
                    </div>
                  </div>
                  <button className="btn-secondary text-xs py-1 px-3" onClick={() => { setIsAlertsOpen(false); setSelectedSubId(s.id); }}>Review</button>

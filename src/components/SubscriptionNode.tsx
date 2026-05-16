@@ -2,15 +2,17 @@ import { Handle, Position } from '@xyflow/react';
 import { Subscription } from '../types';
 import { Globe, Clock, AlertCircle } from 'lucide-react';
 import { differenceInDays } from 'date-fns';
+import { useAppStore } from '../store';
 
 export function SubscriptionNode({ data }: { data: Subscription & { onClick: () => void; isPastDue: boolean; isApproaching: boolean; } }) {
+  const { currency } = useAppStore();
   const nextDate = new Date(data.nextRenewalDate);
   const daysUntil = differenceInDays(nextDate, new Date());
   
   return (
     <div 
-      className={`card flex flex-col p-3 w-56 cursor-pointer hover:border-blue-500/50 transition-colors ${
-        data.isPastDue ? '!border-red-500 shadow-lg shadow-red-500/20' : data.isApproaching ? 'border-amber-500/50' : 'border-white/10'
+      className={`card flex flex-col p-3 w-56 cursor-pointer hover:scale-105 hover:-translate-y-1 hover:shadow-xl hover:z-50 transition-all duration-300 ${
+        data.isPastDue ? '!border-red-500 shadow-lg shadow-red-500/20' : data.isApproaching ? 'border-amber-500/50' : 'border-white/10 hover:border-blue-500/50'
       }`}
       style={{ background: '#15171E' }}
       onClick={data.onClick}
@@ -20,7 +22,7 @@ export function SubscriptionNode({ data }: { data: Subscription & { onClick: () 
       <div className="flex justify-between items-start mb-2">
         <div className="font-medium text-xs truncate max-w-[120px] text-[#E0E0E6]">{data.serviceName}</div>
         <div className="text-[10px] font-semibold whitespace-nowrap bg-white/5 border border-white/10 px-1.5 py-0.5 rounded text-[#E0E0E6]">
-          ${data.amount.toLocaleString()} <span className="text-[8px] text-white/40 font-normal uppercase">{data.cycle === 'monthly' ? '/mo' : data.cycle === 'annual' ? '/yr' : '/qtr'}</span>
+          {data.amount.toLocaleString()} <span className="text-[8px] text-white/40 font-normal uppercase">{data.cycle === 'monthly' ? 'MONTHLY' : data.cycle === 'annual' ? 'ANNUAL' : 'QUARTERLY'} {currency}</span>
         </div>
       </div>
       

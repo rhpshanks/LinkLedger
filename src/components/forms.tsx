@@ -3,7 +3,7 @@ import { useAppStore } from '../store';
 import { Card, Subscription } from '../types';
 
 export function AddCardForm({ onClose }: { onClose: () => void }) {
-  const { addCard } = useAppStore();
+  const { addCard, currency } = useAppStore();
   
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,7 +21,7 @@ export function AddCardForm({ onClose }: { onClose: () => void }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="label-base">Card Label</label>
+        <label className="label-base">Source Label</label>
         <input name="label" required placeholder="e.g. Operations Card" className="input-base" />
       </div>
       <div className="grid grid-cols-2 gap-4">
@@ -30,7 +30,7 @@ export function AddCardForm({ onClose }: { onClose: () => void }) {
           <input name="last4" required maxLength={4} pattern="\d{4}" placeholder="1234" className="input-base" />
         </div>
         <div>
-          <label className="label-base">Card Type</label>
+          <label className="label-base">Source Type</label>
           <select name="type" className="input-base">
             <option value="Visa">Visa</option>
             <option value="Mastercard">Mastercard</option>
@@ -39,7 +39,7 @@ export function AddCardForm({ onClose }: { onClose: () => void }) {
         </div>
       </div>
       <div>
-        <label className="label-base">Spend Limit alerts (Optional, $)</label>
+        <label className="label-base">Planned Budget alerts (Optional, {currency})</label>
         <input name="limit" type="number" min="0" placeholder="e.g. 5000" className="input-base" />
       </div>
       <div>
@@ -55,14 +55,14 @@ export function AddCardForm({ onClose }: { onClose: () => void }) {
       </div>
       <div className="pt-4 flex justify-end gap-3">
         <button type="button" onClick={onClose} className="btn-secondary">Cancel</button>
-        <button type="submit" className="btn-primary">Save Card</button>
+        <button type="submit" className="btn-primary">Save Source</button>
       </div>
     </form>
   )
 }
 
 export function AddSubForm({ onClose, initialCardId, sub }: { onClose: () => void, initialCardId?: string, sub?: Subscription }) {
-  const { cards, addSubscription, updateSubscription } = useAppStore();
+  const { cards, addSubscription, updateSubscription, currency } = useAppStore();
   
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -97,11 +97,11 @@ export function AddSubForm({ onClose, initialCardId, sub }: { onClose: () => voi
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="label-base">Billing Amount ($)</label>
+          <label className="label-base">Estimated Fee ({currency})</label>
           <input name="amount" type="number" step="0.01" min="0" required defaultValue={sub?.amount} placeholder="54.99" className="input-base" />
         </div>
         <div>
-          <label className="label-base">Billing Cycle</label>
+          <label className="label-base">Payment Cycle</label>
           <select name="cycle" className="input-base" defaultValue={sub?.cycle || 'monthly'}>
             <option value="monthly">Monthly</option>
             <option value="quarterly">Quarterly</option>
@@ -114,28 +114,29 @@ export function AddSubForm({ onClose, initialCardId, sub }: { onClose: () => voi
         <input name="nextRenewalDate" type="date" required defaultValue={defaultDate} className="input-base" />
       </div>
       <div>
-        <label className="label-base">Linked Card</label>
+        <label className="label-base">Linked Source</label>
         <select name="cardId" required className="input-base" defaultValue={sub?.cardId || initialCardId || ''}>
-          <option value="">Select a card...</option>
+          <option value="">Select a source...</option>
           {cards.map(c => (
-             <option key={c.id} value={c.id}>{c.label} (•••• {c.last4})</option>
+             <option key={c.id} value={c.id}>{c.label} (ending in {c.last4})</option>
           ))}
         </select>
       </div>
       <div className="pt-4 flex justify-end gap-3">
         <button type="button" onClick={onClose} className="btn-secondary">Cancel</button>
-        <button type="submit" className="btn-primary">{sub ? 'Save Changes' : 'Save Subscription'}</button>
+        <button type="submit" className="btn-primary">{sub ? 'Save Changes' : 'Save Service'}</button>
       </div>
     </form>
   )
 }
 
 export function SettingsForm({ onClose }: { onClose: () => void }) {
-  const { alertsPrefs, setAlertsPrefs } = useAppStore();
+  const { alertsPrefs, setAlertsPrefs, currency, setCurrency } = useAppStore();
   
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+    setCurrency(formData.get('currency') as string);
     setAlertsPrefs({
       advanceNoticeDays: Number(formData.get('advanceNoticeDays')),
       notifyInApp: formData.get('notifyInApp') === 'on',
@@ -146,6 +147,19 @@ export function SettingsForm({ onClose }: { onClose: () => void }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label className="label-base">Display Currency</label>
+        <select name="currency" className="input-base" defaultValue={currency}>
+          <option value="cash">cash</option>
+          <option value="USD">USD</option>
+          <option value="EUR">EUR</option>
+          <option value="GBP">GBP</option>
+          <option value="JPY">JPY</option>
+          <option value="INR">INR</option>
+          <option value="CAD">CAD</option>
+          <option value="AUD">AUD</option>
+        </select>
+      </div>
       <div>
         <label className="label-base">Renewal Reminder (Advance Notice)</label>
         <select name="advanceNoticeDays" className="input-base" defaultValue={alertsPrefs.advanceNoticeDays}>
