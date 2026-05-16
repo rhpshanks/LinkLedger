@@ -24,7 +24,7 @@ const SERVICE_HINTS: Record<string, { card: string; benefit: string }> = {
 };
 
 export default function App() {
-  const { cards, subscriptions, removeCard, removeSubscription, updateNodesPositions, currency } = useAppStore();
+  const { cards, subscriptions, removeCard, removeSubscription, updateNodesPositions, currency, creditScore, setCreditScore } = useAppStore();
   const [loaded, setLoaded] = useState(false);
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
   const [selectedSubId, setSelectedSubId] = useState<string | null>(null);
@@ -138,14 +138,27 @@ export default function App() {
             <div className="px-3">
                <div className="label-base !text-[8px]">Credit Score</div>
                <div className="flex items-center gap-3">
-                  <div className="relative w-10 h-10 flex items-center justify-center">
+                  <button 
+                    onClick={() => {
+                      const val = window.prompt('Write your Score', creditScore.toString());
+                      if (val && !isNaN(Number(val))) setCreditScore(Number(val));
+                    }}
+                    className="relative w-10 h-10 flex items-center justify-center hover:scale-105 transition-transform"
+                  >
                      <svg className="w-full h-full transform -rotate-90">
                         <circle cx="20" cy="20" r="18" stroke="currentColor" strokeWidth="3" fill="transparent" className="text-white/5" />
-                        <circle cx="20" cy="20" r="18" stroke="currentColor" strokeWidth="3" fill="transparent" strokeDasharray="113" strokeDashoffset="28" className="text-blue-500" />
+                        <circle 
+                          cx="20" cy="20" r="18" stroke="currentColor" strokeWidth="3" fill="transparent" 
+                          strokeDasharray="113" 
+                          strokeDashoffset={113 - (113 * (Math.min(900, Math.max(300, creditScore)) - 300) / 600)} 
+                          className={`${creditScore > 700 ? 'text-green-500' : creditScore > 600 ? 'text-yellow-500' : 'text-red-500'} transition-all duration-500`} 
+                        />
                      </svg>
-                     <span className="absolute text-[10px] font-black">742</span>
+                     <span className="absolute text-[10px] font-black">{creditScore}</span>
+                  </button>
+                  <div className={`text-[10px] font-bold uppercase tracking-tighter ${creditScore > 700 ? 'text-green-400' : creditScore > 600 ? 'text-yellow-400' : 'text-red-400'}`}>
+                     {creditScore > 750 ? 'GREAT' : creditScore > 700 ? 'GOOD' : creditScore > 600 ? 'AVERAGE' : 'LOW'}
                   </div>
-                  <div className="text-[10px] font-bold text-green-400 uppercase tracking-tighter">GOOD</div>
                </div>
             </div>
 

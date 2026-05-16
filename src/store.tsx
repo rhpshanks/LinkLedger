@@ -18,6 +18,8 @@ interface AppContextType {
   updateNodesPositions: (positions: Record<string, { x: number; y: number }>) => void;
   currency: string;
   setCurrency: (c: string) => void;
+  creditScore: number;
+  setCreditScore: (score: number) => void;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -49,12 +51,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const saved = loadState('ll_currency', 'USD');
     return saved === 'cash' ? 'USD' : saved;
   });
+  const [creditScore, setCreditScore] = useState<number>(() => loadState('ll_credit_score', 742));
 
   useEffect(() => { localStorage.setItem('ll_cards', JSON.stringify(cards)); }, [cards]);
   useEffect(() => { localStorage.setItem('ll_subs', JSON.stringify(subscriptions)); }, [subscriptions]);
   useEffect(() => { localStorage.setItem('ll_alerts', JSON.stringify(alertsPrefs)); }, [alertsPrefs]);
   useEffect(() => { localStorage.setItem('ll_node_pos', JSON.stringify(nodePositions)); }, [nodePositions]);
   useEffect(() => { localStorage.setItem('ll_currency', JSON.stringify(currency)); }, [currency]);
+  useEffect(() => { localStorage.setItem('ll_credit_score', JSON.stringify(creditScore)); }, [creditScore]);
 
   const addCard = (card: Omit<Card, 'id'>) => {
     const id = `card-${uuidv4()}`;
@@ -97,7 +101,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       addSubscription, updateSubscription, removeSubscription,
       setAlertsPrefs,
       nodePositions, updateNodePosition, updateNodesPositions,
-      currency, setCurrency
+      currency, setCurrency,
+      creditScore, setCreditScore
     }}>
       {children}
     </AppContext.Provider>
