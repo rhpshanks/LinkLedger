@@ -110,7 +110,7 @@ export function AddSubForm({ onClose, initialCardId, sub }: { onClose: () => voi
         </div>
       </div>
       <div>
-        <label className="label-base">Next Renewal Date</label>
+        <label className="label-base">CALENDAR</label>
         <input name="nextRenewalDate" type="date" required defaultValue={defaultDate} className="input-base" />
       </div>
       <div>
