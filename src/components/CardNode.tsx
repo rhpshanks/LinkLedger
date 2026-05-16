@@ -22,7 +22,7 @@ export function CardNode({ data }: { data: Card & { isAlert: boolean, onClick: (
       </div>
 
       <div className="flex items-center gap-2 text-[#E0E0E6] mb-1">
-        <span className="font-mono text-sm tracking-wider">ending in {data.last4}</span>
+        <span className="font-mono text-sm tracking-wider">Card Number {data.last4}</span>
       </div>
 
       {data.limit && (

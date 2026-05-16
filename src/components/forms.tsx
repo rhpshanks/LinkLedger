@@ -118,7 +118,7 @@ export function AddSubForm({ onClose, initialCardId, sub }: { onClose: () => voi
         <select name="cardId" required className="input-base" defaultValue={sub?.cardId || initialCardId || ''}>
           <option value="">Select a source...</option>
           {cards.map(c => (
-             <option key={c.id} value={c.id}>{c.label} (ending in {c.last4})</option>
+             <option key={c.id} value={c.id}>{c.label} (Card Number {c.last4})</option>
           ))}
         </select>
       </div>

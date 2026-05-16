@@ -123,8 +123,8 @@ export default function App() {
              >
                <option value="all">All Items</option>
                <option value="alert">Needs Attention</option>
-               <option value="soon">Renewing Soon (under 14 days)</option>
-               <option value="high_cost">High Cost (over 50 {currency})</option>
+               <option value="soon">Renewing Soon (Less than 14 days)</option>
+               <option value="high_cost">High Cost (More than 50 {currency})</option>
              </select>
           </div>
           <div className="flex gap-2">
@@ -162,7 +162,7 @@ export default function App() {
                     <div className="font-semibold text-lg drop-shadow-sm">{selectedCard.label}</div>
                     <div className="text-white/80 text-sm mt-1 mb-4 flex justify-between">
                       <span>{selectedCard.type}</span>
-                      <span className="font-mono tracking-widest text-shadow-sm">ending in {selectedCard.last4}</span>
+                      <span className="font-mono tracking-widest text-shadow-sm">Card Number {selectedCard.last4}</span>
                     </div>
                   </div>
                   {selectedCard.limit && (
@@ -260,7 +260,7 @@ export default function App() {
                             <CreditCard size={18} className="text-white/40" />
                             <div>
                                <div className="text-sm font-medium text-[#E0E0E6]">{cards.find(c => c.id === selectedSub.cardId)?.label}</div>
-                               <div className="text-xs text-white/40 font-mono">ending in {cards.find(c => c.id === selectedSub.cardId)?.last4}</div>
+                               <div className="text-xs text-white/40 font-mono">Card Number {cards.find(c => c.id === selectedSub.cardId)?.last4}</div>
                             </div>
                           </div>
                         ) : (
