@@ -107,13 +107,13 @@ export default function App() {
         </nav>
 
         <div className="px-3 mt-auto space-y-2">
-          <button 
+          {/* <button 
             onClick={() => setIsPlansOpen(true)}
             className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-blue-400 bg-blue-400/10 rounded-lg hover:bg-blue-400/20 transition-all border border-blue-400/20 shadow-lg shadow-blue-400/5 group"
           >
             <div className="w-4 h-4 rounded-sm bg-blue-400 flex items-center justify-center text-[#0A0A0C] text-[8px] font-black shrink-0">PRO</div>
             <span className="hidden md:block group-hover:translate-x-0.5 transition-transform">See PLANS</span>
-          </button>
+          </button> */}
           <button 
             onClick={() => setIsSettingsOpen(true)}
             className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-white/60 rounded-lg hover:text-white hover:bg-white/5 transition-all"
