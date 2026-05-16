@@ -51,7 +51,7 @@
 }
 
 .input-base {
-  @apply w-full border border-white/10 rounded-lg px-3 py-2 bg-[#0E0E12] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-rgba(0,0,0,0) text-[#E0E0E6] placeholder-white/30;
+  @apply w-full border border-white/10 rounded-lg px-3 py-2 bg-[#0E0E12] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-[rgba(0,0,0,0)] text-[#E0E0E6] placeholder-white/30;
   shift-anim-prop: all 0.2s;
 }
 
