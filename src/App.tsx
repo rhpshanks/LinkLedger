@@ -24,7 +24,32 @@ const SERVICE_HINTS: Record<string, { card: string; benefit: string }> = {
 };
 
 export default function App() {
-  const { cards, subscriptions, removeCard, removeSubscription, updateNodesPositions, currency, creditScore, setCreditScore } = useAppStore();
+  const { cards, subscriptions, removeCard, removeSubscription, updateNodesPositions, currency, creditScore, setCreditScore, isAutoScore, setIsAutoScore } = useAppStore();
+
+  useEffect(() => {
+    if (isAutoScore) {
+      let score = 650;
+      const totalLimits = cards.reduce((sum, c) => sum + (c.limit || 0), 0);
+      const totalUsage = subscriptions.reduce((sum, s) => sum + s.amount, 0);
+      
+      if (totalLimits > 0) {
+        const usageRatio = (totalUsage / totalLimits) * 100;
+        if (usageRatio < 10) score += 200;
+        else if (usageRatio < 30) score += 150;
+        else if (usageRatio < 50) score += 50;
+        else if (usageRatio > 90) score -= 100;
+      }
+
+      score += Math.min(100, cards.length * 20);
+      const pastDueCount = subscriptions.filter(s => {
+        const days = differenceInDays(new Date(s.nextRenewalDate), new Date());
+        return days < 0;
+      }).length;
+      score -= (pastDueCount * 50);
+
+      setCreditScore(Math.min(900, Math.max(300, score)));
+    }
+  }, [cards, subscriptions, isAutoScore, setCreditScore]);
   const [loaded, setLoaded] = useState(false);
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
   const [selectedSubId, setSelectedSubId] = useState<string | null>(null);
@@ -136,14 +161,23 @@ export default function App() {
           <div className="pt-4 border-t border-white/5 space-y-4">
             {/* Credit Score Gauge */}
             <div className="px-3">
-               <div className="label-base !text-[8px]">Credit Score</div>
+               <div className="flex items-center justify-between mb-1">
+                  <div className="label-base !text-[8px] !mb-0">Credit Score</div>
+                  <button 
+                    onClick={() => setIsAutoScore(!isAutoScore)}
+                    className={`text-[7px] font-black px-1.5 py-0.5 rounded transition-all ${isAutoScore ? 'bg-blue-600 text-white' : 'bg-white/5 text-white/40 border border-white/10'}`}
+                  >
+                    {isAutoScore ? 'AUTO' : 'SELF'}
+                  </button>
+               </div>
                <div className="flex items-center gap-3">
                   <button 
+                    disabled={isAutoScore}
                     onClick={() => {
                       const val = window.prompt('Write your Score', creditScore.toString());
                       if (val && !isNaN(Number(val))) setCreditScore(Number(val));
                     }}
-                    className="relative w-10 h-10 flex items-center justify-center hover:scale-105 transition-transform"
+                    className={`relative w-10 h-10 flex items-center justify-center transition-transform ${!isAutoScore ? 'hover:scale-105 cursor-pointer' : 'cursor-default opacity-80'}`}
                   >
                      <svg className="w-full h-full transform -rotate-90">
                         <circle cx="20" cy="20" r="18" stroke="currentColor" strokeWidth="3" fill="transparent" className="text-white/5" />

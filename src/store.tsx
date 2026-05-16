@@ -20,6 +20,8 @@ interface AppContextType {
   setCurrency: (c: string) => void;
   creditScore: number;
   setCreditScore: (score: number) => void;
+  isAutoScore: boolean;
+  setIsAutoScore: (auto: boolean) => void;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -52,6 +54,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return saved === 'cash' ? 'USD' : saved;
   });
   const [creditScore, setCreditScore] = useState<number>(() => loadState('ll_credit_score', 742));
+  const [isAutoScore, setIsAutoScore] = useState<boolean>(() => loadState('ll_auto_score', false));
 
   useEffect(() => { localStorage.setItem('ll_cards', JSON.stringify(cards)); }, [cards]);
   useEffect(() => { localStorage.setItem('ll_subs', JSON.stringify(subscriptions)); }, [subscriptions]);
@@ -59,6 +62,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => { localStorage.setItem('ll_node_pos', JSON.stringify(nodePositions)); }, [nodePositions]);
   useEffect(() => { localStorage.setItem('ll_currency', JSON.stringify(currency)); }, [currency]);
   useEffect(() => { localStorage.setItem('ll_credit_score', JSON.stringify(creditScore)); }, [creditScore]);
+  useEffect(() => { localStorage.setItem('ll_auto_score', JSON.stringify(isAutoScore)); }, [isAutoScore]);
 
   const addCard = (card: Omit<Card, 'id'>) => {
     const id = `card-${uuidv4()}`;
@@ -102,7 +106,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setAlertsPrefs,
       nodePositions, updateNodePosition, updateNodesPositions,
       currency, setCurrency,
-      creditScore, setCreditScore
+      creditScore, setCreditScore,
+      isAutoScore, setIsAutoScore
     }}>
       {children}
     </AppContext.Provider>
