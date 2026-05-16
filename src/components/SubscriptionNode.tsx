@@ -9,18 +9,27 @@ export function SubscriptionNode({ data }: { data: Subscription & { onClick: () 
   const nextDate = new Date(data.nextRenewalDate);
   const daysUntil = differenceInDays(nextDate, new Date());
   
+  const statusColor = data.isPastDue ? '#ef4444' : data.isApproaching ? '#f59e0b' : '#22c55e';
+
   return (
     <div 
-      className={`card flex flex-col p-3 w-56 cursor-pointer hover:scale-105 hover:-translate-y-1 hover:shadow-xl hover:z-50 transition-all duration-300 ${
-        data.isPastDue ? '!border-red-500 shadow-lg shadow-red-500/20' : data.isApproaching ? 'border-amber-500/50' : 'border-white/10 hover:border-blue-500/50'
+      className={`card flex flex-col p-3 w-56 cursor-pointer hover:scale-105 hover:-translate-y-1 hover:shadow-xl hover:z-50 transition-all duration-300 relative ${
+        data.isPastDue 
+          ? '!border-red-500 shadow-lg shadow-red-500/20' 
+          : data.isApproaching 
+            ? 'border-amber-500/50 shadow-md shadow-amber-500/10' 
+            : 'border-white/10 hover:border-blue-500/50'
       }`}
       style={{ background: '#15171E' }}
       onClick={data.onClick}
     >
       <Handle type="target" position={Position.Left} className="w-2 h-8 !bg-white/10 !border-0 !rounded-none -ml-1" />
 
-      <div className="flex justify-between items-start mb-2">
-        <div className="font-medium text-xs truncate max-w-[120px] text-[#E0E0E6]">{data.serviceName}</div>
+      {/* Status dot */}
+      <div className="absolute top-3 right-3 w-2 h-2 rounded-full" style={{ backgroundColor: statusColor, boxShadow: `0 0 6px ${statusColor}` }} />
+
+      <div className="flex justify-between items-start mb-2 pr-4">
+        <div className="font-medium text-xs truncate max-w-[130px] text-[#E0E0E6]">{data.serviceName}</div>
         <div className="text-[10px] font-semibold whitespace-nowrap bg-white/5 border border-white/10 px-1.5 py-0.5 rounded text-[#E0E0E6]">
           {data.amount.toLocaleString()} <span className="text-[8px] text-white/40 font-normal uppercase">{data.cycle === 'monthly' ? 'MONTHLY' : data.cycle === 'annual' ? 'ANNUAL' : 'QUARTERLY'} {currency}</span>
         </div>

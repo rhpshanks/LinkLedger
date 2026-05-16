@@ -77,7 +77,7 @@ export default function App() {
       {/* Sidebar Navigation */}
       <aside className="w-16 md:w-64 border-r border-white/10 flex flex-col pt-6 pb-4 bg-[#0E0E12] shrink-0 z-10 transition-all">
         <div className="px-4 mb-8 flex items-center md:gap-3">
-          <div className="w-8 h-8 rounded bg-blue-600 flex items-center justify-center text-white shrink-0 font-bold shadow-sm">
+          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white shrink-0 font-bold shadow-lg shadow-blue-600/30">
             LL
           </div>
           <h1 className="font-serif font-bold text-xl hidden md:block tracking-tight text-[#E0E0E6]">LinkLedger</h1>
@@ -86,14 +86,14 @@ export default function App() {
         <nav className="flex-1 px-3 space-y-1">
           <button 
             onClick={() => setIsAddCardOpen(true)}
-            className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-white/60 rounded-lg hover:text-white transition-colors"
+            className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-white/60 rounded-lg hover:text-white hover:bg-white/5 transition-all"
           >
             <CreditCard size={18} className="shrink-0" />
             <span className="hidden md:block">Add Funding Source</span>
           </button>
           <button 
             onClick={() => setIsAddSubOpen(true)}
-            className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-white/60 rounded-lg hover:text-white transition-colors"
+            className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-white/60 rounded-lg hover:text-white hover:bg-white/5 transition-all"
           >
             <Plus size={18} className="shrink-0" />
             <span className="hidden md:block">Add Recurring Service</span>
@@ -103,7 +103,7 @@ export default function App() {
         <div className="px-3 mt-auto">
           <button 
             onClick={() => setIsSettingsOpen(true)}
-            className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-white/60 rounded-lg hover:text-white transition-colors"
+            className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-white/60 rounded-lg hover:text-white hover:bg-white/5 transition-all"
           >
             <SettingsIcon size={18} className="shrink-0" />
             <span className="hidden md:block">Settings</span>
@@ -113,7 +113,7 @@ export default function App() {
 
       {/* Main Canvas Area */}
       <main className="flex-1 relative outline-none flex flex-col min-w-0 bg-[radial-gradient(#1A1A22_1px,transparent_1px)] bg-[size:32px_32px]">
-        <header className="h-14 border-b border-white/10 bg-[#0E0E12] z-10 flex items-center justify-between px-4 md:px-6 shrink-0 shadow-sm">
+        <header className="h-14 border-b border-white/10 bg-[#0E0E12] z-10 flex items-center justify-between px-4 md:px-6 shrink-0" style={{ boxShadow: '0 1px 0 rgba(255,255,255,0.04), 0 4px 16px rgba(0,0,0,0.3)' }}>
           <div className="flex items-center gap-4">
              <div className="font-medium text-sm text-white/40 tracking-wide uppercase hidden md:block">Visual Workspace</div>
              <select 
@@ -139,11 +139,22 @@ export default function App() {
         </header>
         
         <div className="flex-1 relative">
-          <Canvas 
-            onSelectCard={(id) => { setSelectedSubId(null); setSelectedCardId(id); }}
-            onSelectSub={(id) => { setSelectedCardId(null); setSelectedSubId(id); }}
-            filterType={filterType}
-          />
+          {cards.length === 0 ? (
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-center pointer-events-none">
+              <div className="w-16 h-16 rounded-2xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center mb-2">
+                <CreditCard size={28} className="text-blue-400/60" />
+              </div>
+              <div className="text-white/50 font-semibold text-base">No funding sources yet</div>
+              <div className="text-white/25 text-sm max-w-xs">Add a funding source from the sidebar to get started. Link your recurring services to it on the canvas.</div>
+              <div className="text-[10px] text-white/20 uppercase tracking-widest mt-2">Ctrl N to add a source</div>
+            </div>
+          ) : (
+            <Canvas 
+              onSelectCard={(id) => { setSelectedSubId(null); setSelectedCardId(id); }}
+              onSelectSub={(id) => { setSelectedCardId(null); setSelectedSubId(id); }}
+              filterType={filterType}
+            />
+          )}
         </div>
       </main>
 
