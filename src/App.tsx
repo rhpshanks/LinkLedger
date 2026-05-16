@@ -132,6 +132,32 @@ export default function App() {
             <SettingsIcon size={18} className="shrink-0" />
             <span className="hidden md:block">Settings</span>
           </button>
+
+          <div className="pt-4 border-t border-white/5 space-y-4">
+            {/* Credit Score Gauge */}
+            <div className="px-3">
+               <div className="label-base !text-[8px]">Credit Score</div>
+               <div className="flex items-center gap-3">
+                  <div className="relative w-10 h-10 flex items-center justify-center">
+                     <svg className="w-full h-full transform -rotate-90">
+                        <circle cx="20" cy="20" r="18" stroke="currentColor" strokeWidth="3" fill="transparent" className="text-white/5" />
+                        <circle cx="20" cy="20" r="18" stroke="currentColor" strokeWidth="3" fill="transparent" strokeDasharray="113" strokeDashoffset="28" className="text-blue-500" />
+                     </svg>
+                     <span className="absolute text-[10px] font-black">742</span>
+                  </div>
+                  <div className="text-[10px] font-bold text-green-400 uppercase tracking-tighter">GOOD</div>
+               </div>
+            </div>
+
+            {/* Monthly Budget Button */}
+            <button className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-white/5 border border-white/10 hover:border-blue-500/50 transition-all group">
+               <div className="text-left">
+                  <div className="label-base !mb-0 !text-[8px]">Monthly Budget</div>
+                  <div className="text-xs font-bold text-[#E0E0E6] uppercase tracking-widest">Set Limit</div>
+               </div>
+               <div className="text-[8px] font-bold text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity">OPEN</div>
+            </button>
+          </div>
         </div>
       </aside>
 
