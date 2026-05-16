@@ -205,7 +205,7 @@ export default function App() {
                     {currency} {subscriptions.reduce((sum, s) => sum + s.amount, 0).toLocaleString()}
                   </div>
                </div>
-               <div className="text-[8px] font-bold text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity">OPEN</div>
+               <div className="text-[8px] font-bold text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity">Show</div>
             </button>
           </div>
         </div>
