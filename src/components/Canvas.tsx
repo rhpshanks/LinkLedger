@@ -155,6 +155,7 @@ export function Canvas({ onSelectCard, onSelectSub, filterType }: { onSelectCard
         onNodesChange={onNodesChangeHandler}
         nodeTypes={nodeTypes}
         fitView
+        proOptions={{ hideAttribution: true }}
       >
         <Controls />
       </ReactFlow>
