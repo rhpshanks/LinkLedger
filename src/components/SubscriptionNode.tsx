@@ -55,7 +55,7 @@ export function SubscriptionNode({ data }: { data: Subscription & { onClick: () 
         <span>
           {data.isPastDue 
             ? `Past due by ${Math.abs(daysUntil)}d` 
-            : `Renews in ${daysUntil}d`}
+            : `Cycles in ${daysUntil}d`}
         </span>
       </div>
       

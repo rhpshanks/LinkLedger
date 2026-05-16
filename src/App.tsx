@@ -24,7 +24,7 @@ const SERVICE_HINTS: Record<string, { card: string; benefit: string }> = {
 };
 
 export default function App() {
-  const { cards, subscriptions, removeCard, removeSubscription, updateNodesPositions, currency, creditScore, setCreditScore, isAutoScore, setIsAutoScore, charityGoal, setCharityGoal, charityCurrent, setCharityCurrent, isPremium } = useAppStore();
+  const { cards, subscriptions, removeCard, removeSubscription, updateNodesPositions, currency, creditScore, setCreditScore, isAutoScore, setIsAutoScore, charityGoal, setCharityGoal, charityCurrent, setCharityCurrent, isPremium, getConvertedAmount } = useAppStore();
 
   useEffect(() => {
     if (isAutoScore) {
@@ -83,7 +83,10 @@ export default function App() {
 
   // Sub calculations
   const cardSubs = subscriptions.filter(s => s.cardId === selectedCardId);
-  const monthlyCardTotal = cardSubs.reduce((acc, s) => acc + (s.cycle === 'monthly' ? s.amount : s.cycle === 'annual' ? s.amount/12 : s.amount/3), 0);
+  const monthlyCardTotal = cardSubs.reduce((acc, s) => {
+    const baseAmount = getConvertedAmount(s.amount, s.currency || 'USD');
+    return acc + (s.cycle === 'monthly' ? baseAmount : s.cycle === 'annual' ? baseAmount/12 : baseAmount/3);
+  }, 0);
   const annualCardTotal = monthlyCardTotal * 12;
 
   const handleArrangeAll = () => {
@@ -207,7 +210,10 @@ export default function App() {
                <div className="text-left">
                   <div className="label-base !mb-0 !text-[8px]">MONTHLY use</div>
                   <div className="text-xs font-bold text-[#E0E0E6] uppercase tracking-widest">
-                    {currency} {subscriptions.reduce((sum, s) => sum + s.amount, 0).toLocaleString()}
+                    {currency} {subscriptions.reduce((sum, s) => {
+                      const baseAmount = getConvertedAmount(s.amount, s.currency || 'USD');
+                      return sum + (s.cycle === 'monthly' ? baseAmount : s.cycle === 'annual' ? baseAmount/12 : baseAmount/3);
+                    }, 0).toLocaleString()}
                   </div>
                </div>
                <div className="text-[8px] font-bold text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity">Show</div>
@@ -221,12 +227,12 @@ export default function App() {
                     <div className="text-[9px] font-black text-blue-400 uppercase tracking-widest">Sponsored Choice</div>
                     <div className="text-[7px] bg-white/10 text-white/40 px-1 py-0.5 rounded uppercase font-black tracking-tighter">AD</div>
                   </div>
-                  <div className="font-bold text-xs text-[#E0E0E6] mb-1">Sapphire Reward Card</div>
-                  <p className="text-[10px] text-white/30 leading-tight mb-3">Earn 3% back on all services tracked here.</p>
+                  <div className="font-bold text-xs text-[#E0E0E6] mb-1">Sapphire Bonus Card</div>
+                  <p className="text-[10px] text-white/30 leading-tight mb-3">Gain 3% back on all services tracked here.</p>
                   <button className="w-full py-1.5 bg-blue-600/20 text-blue-400 text-[9px] font-black uppercase tracking-widest rounded-lg border border-blue-500/30 hover:bg-blue-600 hover:text-white transition-all">Check Now</button>
                 </div>
                 <div className="mt-2 text-center">
-                  <button onClick={() => setIsPlansOpen(true)} className="text-[7px] font-bold text-white/20 hover:text-white/40 transition-colors uppercase tracking-widest underline decoration-white/10">Remove Ads with Pro Plus</button>
+                  <button onClick={() => setIsPlansOpen(true)} className="text-[7px] font-bold text-white/20 hover:text-white/40 transition-colors uppercase tracking-widest underline decoration-white/10">Drop Ads with Pro Plus</button>
                 </div>
               </div>
             )}
@@ -238,7 +244,7 @@ export default function App() {
       <main className="flex-1 relative outline-none flex flex-col min-w-0 bg-[radial-gradient(#1A1A22_1px,transparent_1px)] bg-[size:32px_32px]">
         <header className="h-14 border-b border-white/10 bg-[#0E0E12] z-10 flex items-center justify-between px-4 md:px-6 shrink-0" style={{ boxShadow: '0 1px 0 rgba(255,255,255,0.04), 0 4px 16px rgba(0,0,0,0.3)' }}>
           <div className="flex items-center gap-4">
-             <div className="font-medium text-sm text-white/40 tracking-wide uppercase hidden md:block">Visual Workspace</div>
+             <div className="font-medium text-sm text-white/40 tracking-wide uppercase hidden md:block">Symmetrical Workspace</div>
              <select 
                className="text-sm border border-white/10 bg-[#1E222D] text-[#E0E0E6] rounded-md py-1 px-2 focus:ring-2 focus:ring-blue-500 outline-none"
                value={filterType}
@@ -352,7 +358,7 @@ export default function App() {
                       onClick={() => { removeCard(selectedCard.id); setSelectedCardId(null); }}
                       className="flex-1 btn-danger text-sm"
                     >
-                      Remove Source
+                      Delete Source
                     </button>
                 </div>
                 <p className="text-[10px] text-white/40 text-center mt-2 pb-6">Unlinks all subscriptions</p>
@@ -402,7 +408,7 @@ export default function App() {
                    </div>
 
                    <div>
-                      <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-2">Next Renewal Date</div>
+                      <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-2">Next Cycle Date</div>
                       <div className="flex items-center gap-3 p-3 bg-[#15171E] rounded-lg border border-white/10">
                          <div className="w-10 h-10 rounded border border-white/10 flex flex-col items-center justify-center -space-y-1 bg-[#1E222D]">
                             <span className="text-[8px] font-bold text-red-400 uppercase">{format(new Date(selectedSub.nextRenewalDate), 'MMM')}</span>
@@ -481,27 +487,30 @@ export default function App() {
                  <div>
                    <div className="font-semibold text-[#E0E0E6]">{s.serviceName}</div>
                    <div className="text-sm">
-                     {s.days < 0 ? <span className="text-red-400 font-bold">Past due by {Math.abs(s.days)} days</span> : <span className="text-amber-400 font-bold">Renews in {s.days} days</span>}
+                     {s.days < 0 ? <span className="text-red-400 font-bold">Past due by {Math.abs(s.days)} days</span> : <span className="text-amber-400 font-bold">Cycles in {s.days} days</span>}
                      <span className="text-white/40 ml-2">({currency} {s.amount})</span>
                    </div>
                  </div>
-                 <button className="btn-secondary text-xs py-1 px-3" onClick={() => { setIsAlertsOpen(false); setSelectedSubId(s.id); }}>Review</button>
+                 <button className="btn-secondary text-xs py-1 px-3" onClick={() => { setIsAlertsOpen(false); setSelectedSubId(s.id); }}>Audit</button>
                </div>
              ))}
            {subscriptions.filter(s => differenceInDays(new Date(s.nextRenewalDate), new Date()) <= 14).length === 0 && (
-             <div className="text-center p-8 text-white/40">No upcoming renewals in the next 14 days.</div>
+             <div className="text-center p-8 text-white/40">No upcoming cycles in the next 14 days.</div>
            )}
          </div>
       </Modal>
 
-      <Modal isOpen={isUsageModalOpen} onClose={() => setIsUsageModalOpen(false)} title="MONTHLY USAGE REPORT">
+      <Modal isOpen={isUsageModalOpen} onClose={() => setIsUsageModalOpen(false)} title="MONTHLY USAGE AUDIT">
          <div className="space-y-8 py-4">
             {/* Hero Section */}
             <div className="text-center p-8 rounded-3xl bg-gradient-to-br from-blue-600/20 to-purple-600/10 border border-white/10 relative overflow-hidden shadow-2xl">
                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 animate-pulse" />
                <div className="text-xs font-black text-blue-400 uppercase tracking-[0.3em] mb-3">Total Planned Outflow</div>
                <div className="text-5xl font-black text-[#E0E0E6] tracking-tighter mb-2">
-                  {currency} {subscriptions.reduce((sum, s) => sum + s.amount, 0).toLocaleString()}
+                  {currency} {subscriptions.reduce((sum, s) => {
+                    const baseAmount = getConvertedAmount(s.amount, s.currency || 'USD');
+                    return sum + (s.cycle === 'monthly' ? baseAmount : s.cycle === 'annual' ? baseAmount/12 : baseAmount/3);
+                  }, 0).toLocaleString()}
                </div>
                <div className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Across {subscriptions.length} Regular Services</div>
             </div>
@@ -518,12 +527,12 @@ export default function App() {
                            <div key={s.id}>
                               <div className="flex justify-between text-xs font-bold text-white/70 mb-1.5 uppercase">
                                  <span>{s.serviceName}</span>
-                                 <span>{currency} {s.amount}</span>
+                                 <span>{currency} {getConvertedAmount(s.amount, s.currency || 'USD').toLocaleString()}</span>
                               </div>
                               <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
                                  <div 
                                     className="h-full bg-blue-500 rounded-full transition-all duration-1000" 
-                                    style={{ width: `${(s.amount / subscriptions.reduce((sum, sub) => sum + sub.amount, 0)) * 100}%` }} 
+                                    style={{ width: `${(getConvertedAmount(s.amount, s.currency || 'USD') / subscriptions.reduce((sum, sub) => sum + getConvertedAmount(sub.amount, sub.currency || 'USD'), 0)) * 100}%` }} 
                                  />
                               </div>
                            </div>
@@ -537,14 +546,14 @@ export default function App() {
                      {cards.map(c => {
                         const cardTotal = subscriptions
                            .filter(s => s.cardId === c.id)
-                           .reduce((sum, s) => sum + s.amount, 0);
+                           .reduce((sum, s) => sum + getConvertedAmount(s.amount, s.currency || 'USD'), 0);
                         return (
                            <div key={c.id} className="flex items-center justify-between p-2 rounded-lg bg-white/5 border border-white/5">
                               <div className="flex items-center gap-2">
                                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: c.color }} />
                                  <span className="text-[10px] font-bold text-white/60 uppercase">{c.label}</span>
                               </div>
-                              <span className="text-[10px] font-black text-white/80">{currency} {cardTotal}</span>
+                              <span className="text-[10px] font-black text-white/80">{currency} {cardTotal.toLocaleString()}</span>
                            </div>
                         );
                      })}
@@ -621,7 +630,7 @@ export default function App() {
             </div>
 
             <div className="text-center pb-4">
-               <button onClick={() => setIsUsageModalOpen(false)} className="px-8 py-3 rounded-xl bg-white/10 text-white/60 text-xs font-black uppercase tracking-[0.2em] hover:bg-white/20 transition-all">Close Report</button>
+               <button onClick={() => setIsUsageModalOpen(false)} className="px-8 py-3 rounded-xl bg-white/10 text-white/60 text-xs font-black uppercase tracking-[0.2em] hover:bg-white/20 transition-all">Close Audit</button>
             </div>
          </div>
       </Modal>
@@ -673,7 +682,7 @@ export default function App() {
                   </div>
                   <div className="text-[10px] font-bold text-white/30 uppercase tracking-widest mb-6">{isYearlyBilling ? '/ YEARLY' : '/ MONTHLY'}</div>
                   <ul className="space-y-3 mb-8 flex-1">
-                    {['Senior Logic Advisor', 'Global Currency Scan', 'Audit Grade Visuals', 'Collab Workspace'].map(item => (
+                    {['Senior Logic Advisor', 'Global Currency Scan', 'Audit Grade Blueprints', 'Collab Workspace'].map(item => (
                        <li key={item} className="text-xs text-[#E0E0E6] font-bold flex items-center gap-2">
                           <div className="w-1 h-1 rounded-full bg-blue-400" /> {item}
                        </li>
@@ -733,10 +742,10 @@ export default function App() {
               <div className="flex gap-3">
                  <button onClick={() => setPlansPhase('pay')} className="flex-1 py-3 rounded-xl bg-white/5 text-white/60 text-xs font-bold uppercase tracking-widest hover:bg-white/10 transition-all">Back</button>
                  <button 
-                  onClick={() => { alert('Transaction submitted for review!'); setIsPlansOpen(false); setPlansPhase('pick'); }}
+                  onClick={() => { alert('Transaction submitted for audit!'); setIsPlansOpen(false); setPlansPhase('pick'); }}
                   className="flex-2 py-3 rounded-xl bg-blue-600 text-white text-xs font-bold uppercase tracking-widest hover:bg-blue-500 transition-all shadow-lg shadow-blue-600/20"
                  >
-                   Submit for Review
+                   Submit for Audit
                  </button>
               </div>
            </div>

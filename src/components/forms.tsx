@@ -80,6 +80,7 @@ export function AddSubForm({ onClose, initialCardId, sub }: { onClose: () => voi
       cycle: formData.get('cycle') as Subscription['cycle'],
       nextRenewalDate: new Date(formData.get('nextRenewalDate') as string).toISOString(),
       cardId: formData.get('cardId') as string,
+      currency: formData.get('currency') as string,
     };
     if (sub) {
       updateSubscription(sub.id, data);
@@ -114,6 +115,15 @@ export function AddSubForm({ onClose, initialCardId, sub }: { onClose: () => voi
             <option value="annual">Yearly</option>
           </select>
         </div>
+      </div>
+      <div>
+        <label className="label-base">Specific Currency for this Service</label>
+        <select name="currency" className="input-base" defaultValue={sub?.currency || currency}>
+          <option value="USD">USD</option>
+          <option value="PKR">PKR</option>
+          <option value="GBP">GBP</option>
+          <option value="EUR">EUR</option>
+        </select>
       </div>
       <div>
         <label className="label-base">CALENDAR</label>
@@ -156,18 +166,14 @@ export function SettingsForm({ onClose }: { onClose: () => void }) {
       <div>
         <label className="label-base">Display Currency</label>
         <select name="currency" className="input-base" defaultValue={currency}>
-
           <option value="USD">USD</option>
-
+          <option value="PKR">PKR</option>
           <option value="GBP">GBP</option>
-          <option value="JPY">JPY</option>
-          <option value="INR">INR</option>
-          <option value="CAD">CAD</option>
-          <option value="AUD">AUD</option>
+          <option value="EUR">EUR</option>
         </select>
       </div>
       <div>
-        <label className="label-base">Renewal Reminder (Advance Notice)</label>
+        <label className="label-base">Cycle Reminder (Advance Notice)</label>
         <select name="advanceNoticeDays" className="input-base" defaultValue={alertsPrefs.advanceNoticeDays}>
           <option value="7">7 Days Prior</option>
           <option value="14">14 Days Prior</option>
@@ -194,7 +200,7 @@ export function SettingsForm({ onClose }: { onClose: () => void }) {
           </label>
           <label className="flex items-center gap-2">
             <input type="checkbox" disabled className="rounded border-white/10 bg-[#0E0E12]" />
-            <span className="text-sm">Data Report Generation (PDF/CSV)</span>
+            <span className="text-sm">Data Audit Creation (PDF/CSV)</span>
           </label>
         </div>
       </div>

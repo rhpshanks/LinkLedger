@@ -17,6 +17,7 @@ export interface Subscription {
   cycle: BillingCycle;
   nextRenewalDate: string; // ISO date string
   categoryId?: string;
+  currency?: string;
   cardId?: string;
 }
 

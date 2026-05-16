@@ -28,6 +28,7 @@ interface AppContextType {
   setCharityCurrent: (current: number) => void;
   isPremium: boolean;
   setIsPremium: (premium: boolean) => void;
+  getConvertedAmount: (amount: number, from: string) => number;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -43,7 +44,7 @@ function loadState<T>(key: string, defaultValue: T): T {
 }
 
 const defaultCards: Card[] = [
-  { id: 'c1', label: 'Main Operations', last4: '4111', type: 'Visa', limit: 5000, color: '#2563eb' }
+  { id: 'c1', label: 'Primary Operations', last4: '4111', type: 'Visa', limit: 5000, color: '#2563eb' }
 ];
 
 const defaultSubscriptions: Subscription[] = [
@@ -64,6 +65,20 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [charityGoal, setCharityGoal] = useState<number>(() => loadState('ll_charity_goal', 100));
   const [charityCurrent, setCharityCurrent] = useState<number>(() => loadState('ll_charity_current', 0));
   const [isPremium, setIsPremium] = useState<boolean>(() => loadState('ll_is_premium', false));
+
+  const rates: Record<string, number> = {
+    'USD': 1,
+    'PKR': 280,
+    'GBP': 0.79,
+    'EUR': 0.92
+  };
+
+  const getConvertedAmount = (amount: number, from: string) => {
+    if (from === currency) return amount;
+    const rateFrom = rates[from] || 1;
+    const rateTo = rates[currency] || 1;
+    return (amount / rateFrom) * rateTo;
+  };
 
   useEffect(() => { localStorage.setItem('ll_cards', JSON.stringify(cards)); }, [cards]);
   useEffect(() => { localStorage.setItem('ll_subs', JSON.stringify(subscriptions)); }, [subscriptions]);
@@ -122,7 +137,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       isAutoScore, setIsAutoScore,
       charityGoal, setCharityGoal,
       charityCurrent, setCharityCurrent,
-      isPremium, setIsPremium
+      isPremium, setIsPremium,
+      getConvertedAmount
     }}>
       {children}
     </AppContext.Provider>
