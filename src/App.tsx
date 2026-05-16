@@ -3,17 +3,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Canvas } from './components/Canvas';
 import { useAppStore } from './store';
-import { Plus, CreditCard, LayoutDashboard, Settings as SettingsIcon, Bell } from 'lucide-react';
+import { Plus, CreditCard, Settings as SettingsIcon, Bell } from 'lucide-react';
 import { Modal } from './components/Modal';
 import { AddCardForm, AddSubForm, SettingsForm } from './components/forms';
+import { LoadingScreen } from './components/LoadingScreen';
 import { differenceInDays, format } from 'date-fns';
-import { useEffect } from 'react';
 
 export default function App() {
   const { cards, subscriptions, removeCard, removeSubscription, updateNodesPositions, currency } = useAppStore();
+  const [loaded, setLoaded] = useState(false);
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
   const [selectedSubId, setSelectedSubId] = useState<string | null>(null);
   const [isAddCardOpen, setIsAddCardOpen] = useState(false);
@@ -21,7 +22,6 @@ export default function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isAlertsOpen, setIsAlertsOpen] = useState(false);
   const [isEditSubOpen, setIsEditSubOpen] = useState(false);
-  
   const [filterType, setFilterType] = useState<'all' | 'alert' | 'soon' | 'high_cost'>('all');
 
   useEffect(() => {
@@ -73,7 +73,9 @@ export default function App() {
   };
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-[#0A0A0C] text-[#E0E0E6] font-sans">
+    <>
+      {!loaded && <LoadingScreen onDone={() => setLoaded(true)} />}
+      <div className={`flex h-screen w-full overflow-hidden bg-[#0A0A0C] text-[#E0E0E6] font-sans transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}>
       {/* Sidebar Navigation */}
       <aside className="w-16 md:w-64 border-r border-white/10 flex flex-col pt-6 pb-4 bg-[#0E0E12] shrink-0 z-10 transition-all">
         <div className="px-4 mb-8 flex items-center md:gap-3">
@@ -160,7 +162,9 @@ export default function App() {
 
       {/* Details Panel - Slides in when a node is selected */}
       {(selectedCardId || selectedSubId) && (
-        <aside className="w-80 border-l border-white/10 bg-[#0E0E12] absolute right-0 inset-y-0 shadow-2xl z-20 flex flex-col animate-in slide-in-from-right-8 duration-200">
+        <aside className="w-80 border-l border-white/10 absolute right-0 inset-y-0 shadow-2xl z-20 flex flex-col animate-in slide-in-from-right-8 duration-300"
+          style={{ background: 'rgba(14,14,18,0.85)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}
+        >
            {selectedCardId && selectedCard && (
              <div className="flex flex-col h-full">
                 <div className="p-6 border-b border-white/10">
@@ -337,5 +341,6 @@ export default function App() {
       </Modal>
 
     </div>
+    </>
   );
 }
