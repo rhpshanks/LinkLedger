@@ -103,7 +103,7 @@ export function AddSubForm({ onClose, initialCardId, sub }: { onClose: () => voi
         <div>
           <label className="label-base">Payment Cycle</label>
           <select name="cycle" className="input-base" defaultValue={sub?.cycle || 'monthly'}>
-            <option value="monthly">30 Day Cycle</option>
+            <option value="monthly">Monthly</option>
             <option value="quarterly">90 Day Cycle</option>
             <option value="annual">Yearly</option>
           </select>
@@ -172,12 +172,25 @@ export function SettingsForm({ onClose }: { onClose: () => void }) {
         <label className="label-base">Notification Channels</label>
         <label className="flex items-center gap-2">
           <input type="checkbox" name="notifyInApp" defaultChecked={alertsPrefs.notifyInApp} className="rounded border-white/10 text-blue-500 focus:ring-blue-500 bg-[#0E0E12]" />
-          <span className="text-sm">In-App Alerts Dashboard</span>
+          <span className="text-sm">In-App Notifications Dashboard</span>
         </label>
-        <label className="flex items-center gap-2">
-          <input type="checkbox" name="notifyEmail" defaultChecked={alertsPrefs.notifyEmail} className="rounded border-white/10 text-blue-500 focus:ring-blue-500 bg-[#0E0E12]" />
-          <span className="text-sm">Inbox Note (Post)</span>
-        </label>
+      </div>
+
+      <div className="pt-4 border-t border-white/5 space-y-3">
+        <div className="flex items-center justify-between">
+          <label className="label-base !mb-0 text-blue-400">See PLANS</label>
+          <span className="text-[8px] bg-blue-600 text-white px-1 py-0.5 rounded font-black">PRO ONLY</span>
+        </div>
+        <div className="space-y-2 opacity-50 grayscale cursor-not-allowed">
+          <label className="flex items-center gap-2">
+            <input type="checkbox" disabled className="rounded border-white/10 bg-[#0E0E12]" />
+            <span className="text-sm">Sync on Devices</span>
+          </label>
+          <label className="flex items-center gap-2">
+            <input type="checkbox" disabled className="rounded border-white/10 bg-[#0E0E12]" />
+            <span className="text-sm">Data Report Generation (PDF/CSV)</span>
+          </label>
+        </div>
       </div>
       <div className="pt-4 flex justify-end gap-3">
         <button type="button" onClick={onClose} className="btn-secondary">Cancel</button>

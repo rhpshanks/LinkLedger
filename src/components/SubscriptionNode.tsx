@@ -31,7 +31,7 @@ export function SubscriptionNode({ data }: { data: Subscription & { onClick: () 
       <div className="flex justify-between items-start mb-2 pr-4">
         <div className="font-medium text-xs truncate max-w-[130px] text-[#E0E0E6]">{data.serviceName}</div>
         <div className="text-[10px] font-semibold whitespace-nowrap bg-white/5 border border-white/10 px-1.5 py-0.5 rounded text-[#E0E0E6]">
-          <span className="text-[8px] text-white/40 font-normal uppercase">{currency} {data.cycle === 'monthly' ? '30 DAY' : data.cycle === 'annual' ? 'YEARLY' : 'QUARTERLY'}</span> {data.amount.toLocaleString()}
+          <span className="text-[8px] text-white/40 font-normal uppercase">{currency} {data.cycle === 'monthly' ? 'MONTHLY' : data.cycle === 'annual' ? 'YEARLY' : 'QUARTERLY'}</span> {data.amount.toLocaleString()}
         </div>
       </div>
       
@@ -60,7 +60,7 @@ export function SubscriptionNode({ data }: { data: Subscription & { onClick: () 
       </div>
       
       {data.isPastDue && (
-        <div className="absolute -top-2 -right-2 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center text-[8px] font-bold text-white shadow-sm">!</div>
+        <div className="absolute -top-2 -right-2 w-7 h-4 bg-red-500 rounded-full flex items-center justify-center text-[7px] font-bold text-white shadow-sm uppercase">ALERT</div>
       )}
     </div>
   );

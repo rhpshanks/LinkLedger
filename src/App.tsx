@@ -22,6 +22,8 @@ export default function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isAlertsOpen, setIsAlertsOpen] = useState(false);
   const [isEditSubOpen, setIsEditSubOpen] = useState(false);
+  const [isPlansOpen, setIsPlansOpen] = useState(false);
+  const [isYearlyBilling, setIsYearlyBilling] = useState(false);
   const [filterType, setFilterType] = useState<'all' | 'alert' | 'soon' | 'high_cost'>('all');
 
   useEffect(() => {
@@ -102,7 +104,14 @@ export default function App() {
           </button>
         </nav>
 
-        <div className="px-3 mt-auto">
+        <div className="px-3 mt-auto space-y-2">
+          <button 
+            onClick={() => setIsPlansOpen(true)}
+            className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-blue-400 bg-blue-400/10 rounded-lg hover:bg-blue-400/20 transition-all border border-blue-400/20 shadow-lg shadow-blue-400/5 group"
+          >
+            <div className="w-4 h-4 rounded-sm bg-blue-400 flex items-center justify-center text-[#0A0A0C] text-[8px] font-black shrink-0">PRO</div>
+            <span className="hidden md:block group-hover:translate-x-0.5 transition-transform">See PLANS</span>
+          </button>
           <button 
             onClick={() => setIsSettingsOpen(true)}
             className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-white/60 rounded-lg hover:text-white hover:bg-white/5 transition-all"
@@ -184,7 +193,7 @@ export default function App() {
                     <div className="mt-4 p-3 rounded-lg bg-white/5 border border-white/10 text-sm text-white/60 flex justify-between items-center">
                       <span className="font-semibold">Planned Budget</span>
                       <span className={`font-bold ${monthlyCardTotal > selectedCard.limit ? 'text-red-400' : 'text-green-400'}`}>
-                        {currency} {selectedCard.limit.toLocaleString()} 30 DAY
+                        {currency} {selectedCard.limit.toLocaleString()} MONTHLY
                       </span>
                     </div>
                   )}
@@ -192,7 +201,7 @@ export default function App() {
                 <div className="p-6 flex-1 overflow-y-auto">
                    <div className="grid grid-cols-2 gap-4 mb-8">
                      <div>
-                       <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">30 Day Projection</div>
+                       <div className="text-[10px] uppercase tracking-wider text-white/40 font-bold mb-1">Monthly Projection</div>
                        <div className="text-2xl font-light text-[#E0E0E6]">{currency} {monthlyCardTotal.toFixed(2)}</div>
                      </div>
                      <div>
@@ -212,6 +221,17 @@ export default function App() {
                          <div className="text-sm font-semibold text-[#E0E0E6] bg-white/5 px-2 py-0.5 rounded shadow-sm border border-white/10">{currency} {s.amount}</div>
                        </div>
                      ))}
+                   </div>
+                   <div className="mt-8 pt-6 border-t border-white/10">
+                     <div className="text-[10px] uppercase tracking-wider text-blue-400 font-bold mb-3">Suggested Card Upgrade</div>
+                     <div className="p-4 rounded-xl bg-blue-600/10 border border-blue-500/20 group cursor-pointer hover:bg-blue-600/20 transition-all">
+                       <div className="flex justify-between items-start mb-2">
+                         <div className="font-bold text-sm text-[#E0E0E6]">Sapphire High-Value Card</div>
+                         <div className="text-[10px] bg-blue-600 text-white px-1.5 py-0.5 rounded font-black">AD</div>
+                       </div>
+                       <p className="text-[10px] text-white/50 mb-3">Earn 5% cashback on regular costs tracked here.</p>
+                       <button className="w-full py-2 bg-blue-600 rounded-lg text-[10px] font-bold text-white uppercase tracking-widest shadow-lg shadow-blue-600/20">Check Approval</button>
+                     </div>
                    </div>
                 </div>
                 <div className="p-6 border-t border-white/10 mt-auto">
@@ -337,6 +357,65 @@ export default function App() {
            {subscriptions.filter(s => differenceInDays(new Date(s.nextRenewalDate), new Date()) <= 14).length === 0 && (
              <div className="text-center p-8 text-white/40">No upcoming renewals in the next 14 days.</div>
            )}
+         </div>
+      </Modal>
+
+      <Modal isOpen={isPlansOpen} onClose={() => setIsPlansOpen(false)} title="SELECT your PLAN">
+         <div className="flex justify-center mb-8">
+            <div className="bg-white/5 p-1 rounded-xl border border-white/10 flex">
+               <button 
+                  onClick={() => setIsYearlyBilling(false)}
+                  className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${!isYearlyBilling ? 'bg-blue-600 text-white shadow-lg' : 'text-white/40 hover:text-white'}`}
+               >
+                  MONTHLY
+               </button>
+               <button 
+                  onClick={() => setIsYearlyBilling(true)}
+                  className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${isYearlyBilling ? 'bg-blue-600 text-white shadow-lg' : 'text-white/40 hover:text-white'}`}
+               >
+                  YEARLY
+               </button>
+            </div>
+         </div>
+
+         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-2">
+            {/* No Cost Tier */}
+            <div className="p-6 rounded-2xl bg-white/5 border border-white/10 flex flex-col h-full">
+               <div className="text-sm font-bold text-white/40 uppercase tracking-widest mb-2">Basic</div>
+               <div className="text-3xl font-black text-[#E0E0E6] mb-4">No Cost</div>
+               <ul className="space-y-3 mb-8 flex-1">
+                 <li className="text-xs text-white/70 flex items-center gap-2">3 Cash Sources</li>
+                 <li className="text-xs text-white/70 flex items-center gap-2">10 Regular Services</li>
+                 <li className="text-xs text-white/30 flex items-center gap-2 pt-3">Sync on Devices</li>
+               </ul>
+               <button className="w-full py-3 rounded-xl bg-white/10 text-white/60 text-xs font-bold uppercase tracking-widest cursor-default">Current Choice</button>
+            </div>
+
+            {/* Pro Tier */}
+            <div className="p-6 rounded-2xl bg-blue-600/10 border-2 border-blue-500/50 flex flex-col h-full relative overflow-hidden shadow-2xl shadow-blue-600/20">
+               <div className="absolute top-0 right-0 bg-blue-500 text-white text-[8px] font-black px-3 py-1 rounded-bl-lg">TOP VALUE</div>
+               <div className="text-sm font-bold text-blue-400 uppercase tracking-widest mb-2">PRO</div>
+               <div className="text-3xl font-black text-[#E0E0E6] mb-1">
+                  {isYearlyBilling ? 'USD 50' : 'USD 5'}
+                  <span className="text-[10px] font-bold text-white/40 ml-2 uppercase tracking-widest">
+                     {isYearlyBilling ? 'YEARLY' : 'MONTHLY'}
+                  </span>
+               </div>
+               {isYearlyBilling && (
+                 <div className="text-[10px] font-bold text-green-400 mb-4 uppercase tracking-tighter">
+                   SAVE 10 USD YEARLY
+                 </div>
+               )}
+               {!isYearlyBilling && <div className="h-4 mb-4" />}
+               <ul className="space-y-3 mb-8 flex-1">
+                 <li className="text-xs text-white/90 flex items-center gap-2">Unlimited Sources</li>
+                 <li className="text-xs text-white/90 flex items-center gap-2">Unlimited Services</li>
+                 <li className="text-xs text-white/90 flex items-center gap-2">Sync on Devices</li>
+                 <li className="text-xs text-white/90 flex items-center gap-2">Data Reports</li>
+                 <li className="text-xs text-white/90 flex items-center gap-2">Custom Themes</li>
+               </ul>
+               <button className="w-full py-3 rounded-xl bg-blue-600 text-white text-xs font-bold uppercase tracking-widest hover:bg-blue-500 transition-all shadow-lg shadow-blue-600/40">Select PRO</button>
+            </div>
          </div>
       </Modal>
 
