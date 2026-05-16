@@ -664,7 +664,7 @@ export default function App() {
                   </div>
                   <div className="text-[10px] font-bold text-white/30 uppercase ls-wide mb-6">{isYearlyBilling ? '/ YEARLY' : '/ MONTHLY'}</div>
                   <ul className="space-y-3 mb-8 flex-1">
-                    {['Unlimited Sources', 'Unlimited Services', 'Data Reports', 'Ghosting Anims'].map(item => (
+                    {['Unlimited Sources', 'Unlimited Services', 'Data Audits', 'Logic Hints'].map(item => (
                        <li key={item} className="text-xs text-white/60 flex items-center gap-2">
                           <div className="w-1 h-1 rounded-full bg-blue-500" /> {item}
                        </li>
