@@ -396,14 +396,14 @@ export default function App() {
                <div className="absolute top-0 right-0 bg-blue-500 text-white text-[8px] font-black px-3 py-1 rounded-bl-lg">TOP VALUE</div>
                <div className="text-sm font-bold text-blue-400 uppercase tracking-widest mb-2">PRO</div>
                <div className="text-3xl font-black text-[#E0E0E6] mb-1">
-                  {isYearlyBilling ? 'USD 50' : 'USD 5'}
+                  {isYearlyBilling ? 'USD 20' : 'USD 2'}
                   <span className="text-[10px] font-bold text-white/40 ml-2 uppercase tracking-widest">
                      {isYearlyBilling ? 'YEARLY' : 'MONTHLY'}
                   </span>
                </div>
                {isYearlyBilling && (
                  <div className="text-[10px] font-bold text-green-400 mb-4 uppercase tracking-tighter">
-                   SAVE 10 USD YEARLY
+                   SAVE 4 USD YEARLY
                  </div>
                )}
                {!isYearlyBilling && <div className="h-4 mb-4" />}
