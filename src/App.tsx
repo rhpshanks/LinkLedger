@@ -232,7 +232,7 @@ export default function App() {
                   <button className="w-full py-1.5 bg-blue-600/20 text-blue-400 text-[9px] font-black uppercase tracking-widest rounded-lg border border-blue-500/30 hover:bg-blue-600 hover:text-white transition-all">Check Now</button>
                 </div>
                 <div className="mt-2 text-center">
-                  <button onClick={() => setIsPlansOpen(true)} className="text-[7px] font-bold text-white/20 hover:text-white/40 transition-colors uppercase tracking-widest underline decoration-white/10">Drop Ads with Pro Plus</button>
+                  <button onClick={() => setIsPlansOpen(true)} className="text-[7px] font-bold text-white/20 hover:text-white/40 transition-colors uppercase tracking-widest underline decoration-white/10">Trash Ads with Pro Plus</button>
                 </div>
               </div>
             )}
@@ -301,7 +301,7 @@ export default function App() {
                   </div>
                   <div className="p-4 rounded-xl text-white shadow-md mb-2 relative overflow-hidden" style={{ backgroundColor: selectedCard.color || '#1a1a1a' }}>
                     <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_100%_0%,_white_0%,_transparent_50%)]"></div>
-                    <div className="font-semibold text-lg drop-shadow-sm">{selectedCard.label}</div>
+                    <div className="font-semibold text-lg shadow-sm">{selectedCard.label}</div>
                     <div className="text-white/80 text-sm mt-1 mb-4 flex justify-between">
                       <span>{selectedCard.type}</span>
                       <span className="font-mono tracking-widest text-shadow-sm">Card Number {selectedCard.last4}</span>
