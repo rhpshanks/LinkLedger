@@ -58,6 +58,7 @@ export default function App() {
   const [isAddSubOpen, setIsAddSubOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isAlertsOpen, setIsAlertsOpen] = useState(false);
+  const [isUsageModalOpen, setIsUsageModalOpen] = useState(false);
   const [isEditSubOpen, setIsEditSubOpen] = useState(false);
   const [isPlansOpen, setIsPlansOpen] = useState(false);
   const [isYearlyBilling, setIsYearlyBilling] = useState(false);
@@ -198,7 +199,10 @@ export default function App() {
             </div>
 
             {/* Monthly Budget Button */}
-            <button className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-white/5 border border-white/10 hover:border-blue-500/50 transition-all group">
+            <button 
+               onClick={() => setIsUsageModalOpen(true)}
+               className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-white/5 border border-white/10 hover:border-blue-500/50 transition-all group"
+            >
                <div className="text-left">
                   <div className="label-base !mb-0 !text-[8px]">MONTHLY use</div>
                   <div className="text-xs font-bold text-[#E0E0E6] uppercase tracking-widest">
@@ -468,6 +472,88 @@ export default function App() {
            {subscriptions.filter(s => differenceInDays(new Date(s.nextRenewalDate), new Date()) <= 14).length === 0 && (
              <div className="text-center p-8 text-white/40">No upcoming renewals in the next 14 days.</div>
            )}
+         </div>
+      </Modal>
+
+      <Modal isOpen={isUsageModalOpen} onClose={() => setIsUsageModalOpen(false)} title="MONTHLY USAGE REPORT">
+         <div className="space-y-8 py-4">
+            {/* Hero Section */}
+            <div className="text-center p-8 rounded-3xl bg-gradient-to-br from-blue-600/20 to-purple-600/10 border border-white/10 relative overflow-hidden shadow-2xl">
+               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 animate-pulse" />
+               <div className="text-xs font-black text-blue-400 uppercase tracking-[0.3em] mb-3">Total Planned Outflow</div>
+               <div className="text-5xl font-black text-[#E0E0E6] tracking-tighter mb-2">
+                  {currency} {subscriptions.reduce((sum, s) => sum + s.amount, 0).toLocaleString()}
+               </div>
+               <div className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Across {subscriptions.length} Regular Services</div>
+            </div>
+
+            {/* Service Distribution */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+               <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
+                  <div className="text-[10px] font-black text-white/40 uppercase mb-4 tracking-widest">Top Cost Centers</div>
+                  <div className="space-y-4">
+                     {subscriptions
+                        .sort((a, b) => b.amount - a.amount)
+                        .slice(0, 3)
+                        .map(s => (
+                           <div key={s.id}>
+                              <div className="flex justify-between text-xs font-bold text-white/70 mb-1.5 uppercase">
+                                 <span>{s.serviceName}</span>
+                                 <span>{currency} {s.amount}</span>
+                              </div>
+                              <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                                 <div 
+                                    className="h-full bg-blue-500 rounded-full transition-all duration-1000" 
+                                    style={{ width: `${(s.amount / subscriptions.reduce((sum, sub) => sum + sub.amount, 0)) * 100}%` }} 
+                                 />
+                              </div>
+                           </div>
+                        ))}
+                  </div>
+               </div>
+
+               <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
+                  <div className="text-[10px] font-black text-white/40 uppercase mb-4 tracking-widest">Cash Sources used</div>
+                  <div className="space-y-3">
+                     {cards.map(c => {
+                        const cardTotal = subscriptions
+                           .filter(s => s.cardId === c.id)
+                           .reduce((sum, s) => sum + s.amount, 0);
+                        return (
+                           <div key={c.id} className="flex items-center justify-between p-2 rounded-lg bg-white/5 border border-white/5">
+                              <div className="flex items-center gap-2">
+                                 <div className="w-2 h-2 rounded-full" style={{ backgroundColor: c.color }} />
+                                 <span className="text-[10px] font-bold text-white/60 uppercase">{c.label}</span>
+                              </div>
+                              <span className="text-[10px] font-black text-white/80">{currency} {cardTotal}</span>
+                           </div>
+                        );
+                     })}
+                  </div>
+               </div>
+            </div>
+
+            {/* Smart Hints Capability */}
+            <div className="p-6 rounded-2xl bg-blue-600/5 border border-blue-500/20">
+               <div className="flex items-center gap-2 mb-4">
+                  <div className="w-5 h-5 rounded bg-blue-500 flex items-center justify-center text-[#0A0A0C] text-[8px] font-black">AI</div>
+                  <span className="text-[10px] font-black text-blue-400 uppercase tracking-widest">Logic Suggestions</span>
+               </div>
+               <div className="space-y-3">
+                  <p className="text-xs text-white/60 leading-relaxed italic">
+                     "Based on your current usage, switching to a high-return card for your Streaming services could save you up to 10 USD monthly."
+                  </p>
+                  <div className="pt-2 flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                     {['Amex Blue', 'Savor Card', 'Apple Card'].map(card => (
+                        <div key={card} className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-[9px] font-bold text-white/40 whitespace-nowrap">{card}</div>
+                     ))}
+                  </div>
+               </div>
+            </div>
+
+            <div className="text-center pb-4">
+               <button onClick={() => setIsUsageModalOpen(false)} className="px-8 py-3 rounded-xl bg-white/10 text-white/60 text-xs font-black uppercase tracking-[0.2em] hover:bg-white/20 transition-all">Close Report</button>
+            </div>
          </div>
       </Modal>
 
