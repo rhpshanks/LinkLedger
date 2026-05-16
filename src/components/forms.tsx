@@ -45,7 +45,7 @@ export function AddCardForm({ onClose, card }: { onClose: () => void; card?: Car
         </div>
       </div>
       <div>
-        <label className="label-base">Planned Budget alerts (Optional, {currency})</label>
+        <label className="label-base">Planned MONTHLY use alerts (Optional, {currency})</label>
         <input name="limit" type="number" min="0" defaultValue={card?.limit} placeholder="like 5000" className="input-base" />
       </div>
       <div>
